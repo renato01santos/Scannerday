@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ScannerDay — inteligência esportiva baseada em dados." />
+  <title>ScannerDay — Sem dados, sem aposta.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="premium.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">S</span><div><strong>Scanner<span>Day</span></strong><small>SPORTS INTELLIGENCE</small></div></div>
+      <nav id="nav">
+        <button class="nav-item active" data-page="dashboard"><span>⌁</span> Visão geral</button>
+        <button class="nav-item" data-page="scanner"><span>⌖</span> Scanner <b>8</b></button>
+        <button class="nav-item" data-page="ranking"><span>↗</span> Ranking</button>
+        <button class="nav-item" data-page="history"><span>◷</span> Histórico</button>
+        <button class="nav-item" data-page="stats"><span>◫</span> Estatísticas</button>
+        <button class="nav-item" data-page="finance"><span>◈</span> Financeiro</button>
+        <button class="nav-item" data-page="watchlist"><span>☆</span> Watchlist <b id="watchCount">0</b></button>
+        <button class="nav-item" data-page="ai"><span>✦</span> Scanner AI</button>
+        <p class="nav-label">GESTÃO</p>
+        <button class="nav-item" data-page="settings"><span>⚙</span> Configurações</button>
+      </nav>
+      <div class="sidebar-card"><div class="pulse"></div><div><strong>Scanner ativo</strong><small>Próxima varredura às 06:00</small></div></div>
+      <div class="sidebar-footer"><div class="avatar">RM</div><div><strong>Rafael Mendes</strong><small>Plano Pro</small></div><button>⋮</button></div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <div class="market-status"><span></span> Mercado atualizado <b>há 2 min</b></div>
+        <div class="top-actions"><button class="icon-btn">?</button><button class="icon-btn alert">♢</button><button class="scan-btn" id="scanBtn">⌁ Executar scanner</button></div>
+      </header>
+
+      <div class="content">
+        <section class="page active" id="dashboard-page">
+          <div class="page-heading"><div><p class="eyebrow">TERÇA-FEIRA, 28 DE JULHO</p><h1>Bom dia, Rafael.</h1><p>Estes são os sinais encontrados nas próximas 72 horas.</p></div><div class="window-pill">Janela de análise <strong>28—30 JUL</strong></div></div>
+
+          <div class="kpis">
+            <article class="kpi"><div class="kpi-icon purple">⌖</div><div><span>JOGOS ENCONTRADOS</span><strong>08</strong><small><i>+3</i> desde ontem</small></div></article>
+            <article class="kpi"><div class="kpi-icon green">✓</div><div><span>JOGOS APROVADOS</span><strong>04</strong><small>50% dos analisados</small></div></article>
+            <article class="kpi"><div class="kpi-icon red">×</div><div><span>DESCARTADOS</span><strong>02</strong><small>EV negativo</small></div></article>
+            <article class="kpi highlight"><div><span>MAIOR OPORTUNIDADE</span><strong>+12.8%</strong><small>EV • PSV vs Feyenoord</small></div><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
+          </div>
+
+          <div class="ops-grid">
+            <section class="panel scanner-status"><div class="panel-head"><div><h2>Scanner</h2><p>Monitoramento em tempo real</p></div><span class="live-pill"><i></i> ONLINE</span></div><div class="status-times"><div><span>ÚLTIMA EXECUÇÃO</span><strong>09:18</strong><small>há 2 minutos</small></div><div><span>PRÓXIMA EXECUÇÃO</span><strong>10:00</strong><small>em 40 minutos</small></div><div><span>JANELA</span><strong>72h</strong><small>28—30 JUL</small></div></div></section>
+            <section class="panel api-status"><div class="panel-head"><div><h2>Status das APIs</h2><p>Saúde das integrações</p></div><span class="all-systems">4 serviços</span></div><div class="api-grid"><span><i class="online"></i>API de Jogos <b>Online</b></span><span><i class="online"></i>API de Odds <b>Online</b></span><span><i class="unstable"></i>API Estatística <b>Instável</b></span><span><i class="online"></i>API IA <b>Online</b></span></div></section>
+            <section class="panel market-card"><div class="panel-head"><div><h2>Mercado</h2><p>Dados carregados</p></div><span class="live-pill"><i></i> ABERTO</span></div><div class="market-numbers"><div><strong>962</strong><span>JOGOS</span></div><div><strong>28</strong><span>LIGAS</span></div><div><strong>2m</strong><span>ATUALIZAÇÃO</span></div></div></section>
+          </div>
+
+          <div class="grid-main">
+            <section class="panel opportunities"><div class="panel-head"><div><h2>Top oportunidades</h2><p>Ranking por ScannerScore, EV e probabilidade</p></div><button data-go="ranking">Ver ranking completo →</button></div><div id="topGames"></div></section>
+            <aside class="panel score-card"><div class="panel-head"><div><h2>ScannerScore médio</h2><p>Últimos 30 dias</p></div><span class="trend">↗ 4.2%</span></div><div class="gauge-wrap"><div class="gauge"><div class="gauge-inner"><strong>78</strong><span>/100</span><small>MUITO BOM</small></div></div></div><div class="score-legend"><span><i class="a-plus"></i>A+ <b>2</b></span><span><i class="a"></i>A <b>2</b></span><span><i class="b"></i>B <b>2</b></span><span><i class="c"></i>C <b>2</b></span></div></aside>
+          </div>
+
+          <div class="bottom-grid">
+            <section class="panel chart-panel"><div class="panel-head"><div><h2>Performance acumulada</h2><p>Resultado em unidades</p></div><div class="range-tabs"><button>7D</button><button class="active">30D</button><button>90D</button></div></div><div class="chart-summary"><strong>+18.42u</strong><span>↗ 12.6% no período</span></div><div class="line-chart"><div class="grid-lines"></div><svg viewBox="0 0 700 170" preserveAspectRatio="none"><defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24e7a2" stop-opacity=".28"/><stop offset="1" stop-color="#24e7a2" stop-opacity="0"/></linearGradient></defs><path class="area" d="M0,142 C55,145 70,112 120,120 S185,102 220,111 S275,73 320,83 S375,52 420,67 S485,25 530,45 S600,12 700,19 L700,170 L0,170Z"/><path class="line" d="M0,142 C55,145 70,112 120,120 S185,102 220,111 S275,73 320,83 S375,52 420,67 S485,25 530,45 S600,12 700,19"/></svg><div class="x-axis"><span>01 JUL</span><span>07 JUL</span><span>13 JUL</span><span>19 JUL</span><span>25 JUL</span><span>HOJE</span></div></div></section>
+            <section class="panel league-panel"><div class="panel-head"><div><h2>Distribuição por liga</h2><p>Jogos analisados este mês</p></div></div><div class="donut-row"><div class="donut"><div><strong>64</strong><span>JOGOS</span></div></div><div class="league-list"><span><i style="--c:#755cf5"></i>Premier League <b>24</b></span><span><i style="--c:#24e7a2"></i>La Liga <b>16</b></span><span><i style="--c:#3ca8ff"></i>Bundesliga <b>13</b></span><span><i style="--c:#f7ba45"></i>Outras <b>11</b></span></div></div></section>
+          </div>
+          <div class="alerts-grid"><section class="panel"><div class="panel-head"><div><h2>Central de alertas</h2><p>Mudanças relevantes detectadas</p></div></div><div class="alert-feed"><div><i class="alert-fire">↘</i><span><strong>Odd caiu 5.3%</strong><small>PSV × Feyenoord • há 3 min</small></span><b>1.50 → 1.42</b></div><div><i class="alert-up">↗</i><span><strong>EV aumentou</strong><small>Rangers × Celtic • há 8 min</small></span><b class="green-text">+11.1%</b></div><div><i class="alert-score">⌁</i><span><strong>ScannerScore alterado</strong><small>Real Madrid • há 14 min</small></span><b>83 → 87</b></div></div></section><section class="panel"><div class="panel-head"><div><h2>Watchlist</h2><p>Acompanhamento prioritário</p></div><button data-go="watchlist">Abrir lista →</button></div><div id="dashboardWatch" class="empty-watch"><span>☆</span><strong>Nenhum jogo acompanhado</strong><small>Favorite um jogo no scanner para monitorá-lo.</small></div></section></div>
+        </section>
+
+        <section class="page" id="scanner-page"><div class="page-heading"><div><p class="eyebrow">ETAPAS 1—4</p><h1>Scanner diário</h1><p>Todos os candidatos encontrados, sem filtros ocultos.</p></div><button class="scan-btn" id="scanBtn2">⌁ Nova varredura</button></div><div class="filters"><label>Busca <input id="searchInput" placeholder="Time ou liga..." /></label><label>Classificação <select id="classFilter"><option value="all">Todas</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>Reprovado</option></select></label><label>Odd <select><option>1.25—1.60</option></select></label></div><section class="panel table-panel"><div class="table-head"><span>JOGO / LIGA</span><span>ODD</span><span>PROB.</span><span>ODD JUSTA</span><span>EV</span><span>SCORE</span><span>CLASSE</span></div><div id="scannerTable"></div></section></section>
+
+        <section class="page" id="ranking-page"><div class="page-heading"><div><p class="eyebrow">ETAPA 5</p><h1>Top ScannerDay</h1><p>O ranking completo das melhores oportunidades.</p></div></div><div class="podium" id="podium"></div><section class="panel"><div class="table-head rank"><span>#</span><span>JOGO</span><span>ODD</span><span>PROB.</span><span>EV</span><span>SCANNERSCORE</span><span>CLASSE</span></div><div id="rankTable"></div></section></section>
+
+        <section class="page" id="history-page"><div class="page-heading"><div><p class="eyebrow">AUDITORIA COMPLETA</p><h1>Histórico</h1><p>Todas as análises ficam registradas. Nunca apagamos dados.</p></div></div><div class="kpis history-kpis"><article class="simple-kpi"><span>TOTAL DE ENTRADAS</span><strong>128</strong></article><article class="simple-kpi"><span>GREENS</span><strong class="green-text">89</strong></article><article class="simple-kpi"><span>REDS</span><strong class="red-text">35</strong></article><article class="simple-kpi"><span>VOIDS</span><strong>04</strong></article></div><section class="panel history-panel" id="historyTable"></section></section>
+
+        <section class="page" id="stats-page"><div class="page-heading"><div><p class="eyebrow">INTELIGÊNCIA HISTÓRICA</p><h1>Estatísticas</h1><p>Entenda onde o modelo entrega mais valor.</p></div></div><div class="kpis"><article class="simple-kpi"><span>TAXA DE ACERTO</span><strong>69.5%</strong><small class="green-text">↗ 3.2% no mês</small></article><article class="simple-kpi"><span>ROI</span><strong>14.38%</strong></article><article class="simple-kpi"><span>YIELD</span><strong>9.74%</strong></article><article class="simple-kpi"><span>LUCRO</span><strong class="green-text">+38.42u</strong></article></div><div class="stats-grid"><section class="panel"><div class="panel-head"><div><h2>Performance por faixa de odds</h2><p>Últimos 90 dias</p></div></div><div class="bar-stat"><label>1.25—1.35 <b>+8.2u</b></label><div><i style="width:48%"></i></div></div><div class="bar-stat"><label>1.36—1.45 <b>+17.6u</b></label><div><i style="width:86%"></i></div></div><div class="bar-stat"><label>1.46—1.60 <b>+12.6u</b></label><div><i style="width:64%"></i></div></div></section><section class="panel"><div class="panel-head"><div><h2>Performance por classificação</h2><p>ROI médio</p></div></div><div class="class-performance"><span><i class="badge grade-ap">A+</i><strong>21.4%</strong><small>42 entradas</small></span><span><i class="badge grade-a">A</i><strong>14.8%</strong><small>36 entradas</small></span><span><i class="badge grade-b">B</i><strong>7.2%</strong><small>31 entradas</small></span><span><i class="badge grade-c">C</i><strong>2.1%</strong><small>19 entradas</small></span></div></section></div></section>
+
+        <section class="page" id="settings-page"><div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Configurações</h1><p>Ajuste os critérios e pesos do modelo.</p></div><button class="scan-btn" id="saveSettings">Salvar alterações</button></div><div class="settings-grid"><section class="panel settings-card"><div class="panel-head"><div><h2>Parâmetros do scanner</h2><p>Critérios da etapa inicial</p></div></div><label>Odd mínima <input type="number" value="1.25" step="0.01"></label><label>Odd máxima <input type="number" value="1.60" step="0.01"></label><label>Janela de pesquisa <select><option>Próximos 3 dias</option><option>Próximos 5 dias</option><option>Próximos 7 dias</option></select></label><label class="toggle-row">Somente favorito visitante <input type="checkbox" checked><i></i></label></section><section class="panel settings-card"><div class="panel-head"><div><h2>Pesos do ScannerScore</h2><p>Total: <strong id="weightTotal">100</strong> pontos</p></div></div><div id="weights"></div></section></div></section>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast"><span>✓</span><div><strong>Scanner concluído</strong><small>8 jogos encontrados e analisados.</small></div></div>
+  <div class="modal" id="gameModal"><div class="modal-card"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div>
+  <script src="config.js"></script>
+  <script src="backend-client.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
