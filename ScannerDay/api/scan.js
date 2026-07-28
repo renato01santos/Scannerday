@@ -1,4 +1,5 @@
 // ScannerDay scanner date-query-v2
+//Compatibilizar scanner com plano gratuito
 const API_BASE = "https://v3.football.api-sports.io";
 
 function dateOnly(date) {
