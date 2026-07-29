@@ -92,9 +92,18 @@ async function handler(request, response) {
       return dateOnly(date);
     });
     const dailyPayloads = [];
+    const skippedDates = [];
     for (const date of scanDates) {
       const query = new URLSearchParams({ date, timezone: "America/Sao_Paulo" });
-      dailyPayloads.push(await football(`/fixtures?${query}`));
+      try {
+        dailyPayloads.push(await football(`/fixtures?${query}`));
+      } catch (error) {
+        if (error.message.includes("Free plans do not have access to this date")) {
+          skippedDates.push(date);
+          continue;
+        }
+        throw error;
+      }
     }
     const fixtures = dailyPayloads.flatMap(payload => payload.response || []);
 
@@ -131,7 +140,10 @@ async function handler(request, response) {
 
     const savedGames = await upsert("games", games);
     const latency = Date.now() - started;
-    await updateService("online", `${savedGames.length} jogos sincronizados`, latency);
+    const coverageMessage = skippedDates.length
+      ? `${savedGames.length} jogos sincronizados; ${skippedDates.length} data(s) limitada(s) pelo plano Free`
+      : `${savedGames.length} jogos sincronizados`;
+    await updateService("online", coverageMessage, latency);
     await patchRun(run.id, {
       status: "completed", stage: 2, leagues_total: savedLeagues.length,
       leagues_processed: savedLeagues.length, games_total: fixtures.length,
@@ -139,7 +151,8 @@ async function handler(request, response) {
     });
     return response.status(200).json({
       ok: true, runId: run.id, leagues: savedLeagues.length,
-      teams: savedTeams.length, games: savedGames.length, elapsedMs: latency
+      teams: savedTeams.length, games: savedGames.length,
+      skippedDates, elapsedMs: latency
     });
   } catch (error) {
     await updateService("offline", error.message, Date.now() - started).catch(() => {});
