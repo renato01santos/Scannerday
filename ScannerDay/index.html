@@ -12,9 +12,24 @@
   <link rel="stylesheet" href="premium.css" />
   <link rel="stylesheet" href="admin.css" />
   <link rel="stylesheet" href="admin-login.css" />
+  <link rel="stylesheet" href="saas-auth.css" />
+  <style>[hidden]{display:none!important}</style>
 </head>
 <body>
-  <div class="app-shell">
+  <section class="auth-gate" id="authGate">
+    <div class="auth-brand"><span class="brand-mark">S</span><div><strong>Scanner<span>Day</span></strong><small>SPORTS INTELLIGENCE</small></div></div>
+    <div class="auth-layout">
+      <div class="auth-pitch"><span class="auth-kicker">INTELIGÊNCIA ESPORTIVA COMO SERVIÇO</span><h1>Dados reais. Decisões com contexto.</h1><p>Acesse análises publicadas, ranking, histórico e sua watchlist em um ambiente protegido.</p><div class="auth-benefits"><span>✓ Análises editoriais verificadas</span><span>✓ Área pessoal e watchlist</span><span>✓ Administração separada por permissão</span></div></div>
+      <section class="auth-card">
+        <div class="auth-tabs"><button class="active" type="button" data-auth-tab="login">Entrar</button><button type="button" data-auth-tab="signup">Criar conta</button></div>
+        <form id="loginForm" class="auth-form active"><div><span>Bem-vindo de volta</span><h2>Entre na sua conta</h2></div><label>E-mail<input id="loginEmail" type="email" autocomplete="username" required placeholder="voce@email.com"></label><label>Senha<input id="loginPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="Sua senha"></label><button class="auth-primary" type="submit">Entrar</button><button class="auth-link" id="showRecovery" type="button">Esqueci minha senha</button></form>
+        <form id="signupForm" class="auth-form"><div><span>Comece agora</span><h2>Crie sua conta</h2></div><label>Nome<input id="signupName" type="text" autocomplete="name" required placeholder="Seu nome"></label><label>E-mail<input id="signupEmail" type="email" autocomplete="email" required placeholder="voce@email.com"></label><label>Senha<input id="signupPassword" type="password" autocomplete="new-password" required minlength="6" placeholder="Mínimo de 6 caracteres"></label><button class="auth-primary" type="submit">Criar conta</button></form>
+        <form id="recoveryForm" class="auth-form"><div><span>Recuperar acesso</span><h2>Redefina sua senha</h2><p>Enviaremos um link seguro para o seu e-mail.</p></div><label>E-mail<input id="recoveryEmail" type="email" autocomplete="email" required placeholder="voce@email.com"></label><button class="auth-primary" type="submit">Enviar link</button><button class="auth-link" id="backToLogin" type="button">Voltar para o login</button></form>
+        <p class="auth-message" id="authMessage" hidden></p>
+      </section>
+    </div>
+  </section>
+  <div class="app-shell" id="appShell" hidden>
     <aside class="sidebar" id="sidebar">
       <div class="brand"><span class="brand-mark">S</span><div><strong>Scanner<span>Day</span></strong><small>SPORTS INTELLIGENCE</small></div></div>
       <nav id="nav">
@@ -26,20 +41,20 @@
         <button class="nav-item" data-page="finance"><span>◈</span> Financeiro</button>
         <button class="nav-item" data-page="watchlist"><span>☆</span> Watchlist <b id="watchCount">0</b></button>
         <button class="nav-item" data-page="ai"><span>✦</span> Scanner AI</button>
-        <p class="nav-label">GESTÃO</p>
-        <button class="nav-item" data-page="admin-import"><span>⇧</span> Importar análises</button>
-        <button class="nav-item" data-page="admin-imports"><span>▤</span> Histórico de importações</button>
-        <button class="nav-item" data-page="settings"><span>⚙</span> Configurações</button>
+        <p class="nav-label" data-admin-only>GESTÃO ADMINISTRATIVA</p>
+        <button class="nav-item" data-page="admin-import" data-admin-only><span>⇧</span> Importar análises</button>
+        <button class="nav-item" data-page="admin-imports" data-admin-only><span>▤</span> Histórico de importações</button>
+        <button class="nav-item" data-page="settings" data-admin-only><span>⚙</span> Configurações</button>
       </nav>
       <div class="sidebar-card"><div class="pulse"></div><div><strong>Carregando dados</strong><small>Aguardando o Supabase</small></div></div>
-      <div class="sidebar-footer"><div class="avatar">RM</div><div><strong>Rafael Mendes</strong><small>Plano Pro</small></div><button>⋮</button></div>
+      <div class="sidebar-footer"><div class="avatar" id="accountAvatar">U</div><div><strong id="accountName">Usuário</strong><small id="accountRole">Conta ScannerDay</small></div><button id="sidebarLogout" title="Sair">↪</button></div>
     </aside>
 
     <main>
       <header class="topbar">
         <button class="menu-btn" id="menuBtn">☰</button>
         <div class="market-status"><span></span> Verificando backend <b>aguarde</b></div>
-        <div class="top-actions"><button class="icon-btn">?</button><button class="icon-btn alert">♢</button><button class="scan-btn" id="scanBtn">⌁ Executar scanner</button></div>
+        <div class="top-actions"><span class="role-pill" id="rolePill">USUÁRIO</span><button class="icon-btn">?</button><button class="icon-btn alert">♢</button><button class="scan-btn" id="scanBtn">⌁ Executar scanner</button></div>
       </header>
 
       <div class="content">
@@ -101,6 +116,7 @@
   <div class="modal" id="gameModal"><div class="modal-card"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div>
   <script src="config.js"></script>
   <script src="backend-client.js"></script>
+  <script src="saas-auth.js"></script>
   <script src="app.js"></script>
   <script src="editor.js"></script>
 </body>

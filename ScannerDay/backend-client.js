@@ -46,7 +46,10 @@
       method: "POST",
       body: JSON.stringify({ email, password, data: { name } })
     });
-    state.session = session;
+    if (session?.access_token) {
+      state.session = session;
+      localStorage.setItem("scannerday-session", JSON.stringify(session));
+    }
     return session;
   }
 
@@ -84,6 +87,24 @@
     localStorage.removeItem("scannerday-session");
   }
 
+  async function getProfile() {
+    if (!state.session?.access_token) throw new Error("Faça login para continuar.");
+    const rows = await request(`/rest/v1/profiles?id=eq.${encodeURIComponent(state.session.user.id)}&select=id,name,role,plan&limit=1`);
+    if (!rows?.length) throw new Error("Perfil de usuário não encontrado.");
+    return rows[0];
+  }
+
+  async function recoverPassword(email) {
+    if (!configured()) throw new Error("Supabase ainda não configurado");
+    const response = await fetch(`${config.supabaseUrl}/auth/v1/recover`, {
+      method: "POST",
+      headers: { apikey: config.supabaseAnonKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ email, redirect_to: `${location.origin}/` })
+    });
+    if (!response.ok) { const detail = await response.json().catch(() => ({})); throw new Error(detail?.msg || detail?.error_description || "Não foi possível enviar o link."); }
+    return true;
+  }
+
   async function listGames() {
     return request("/rest/v1/game_analysis_view?select=*&order=scanner_score.desc.nullslast");
   }
@@ -116,5 +137,5 @@
     try { state.session = JSON.parse(saved); } catch (_) { localStorage.removeItem("scannerday-session"); }
   }
 
-  window.ScannerBackend = { state, configured, init, signUp, signIn, refreshSession, ensureSession, signOut, listGames, listHistory, getScannerWeights, getServiceStatus, toggleWatchlist };
+  window.ScannerBackend = { state, configured, init, signUp, signIn, refreshSession, ensureSession, signOut, getProfile, recoverPassword, listGames, listHistory, getScannerWeights, getServiceStatus, toggleWatchlist };
 })();

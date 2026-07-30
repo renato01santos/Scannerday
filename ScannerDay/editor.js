@@ -7,11 +7,11 @@
   const uploadPanel = document.querySelector("#admin-import-page .upload-panel");
   function session() { return window.ScannerBackend?.state?.session || null; }
   function updateAuthUI() {
-    const current = session(), authenticated = Boolean(current?.access_token);
-    byId("adminLoginPanel").hidden = authenticated;
-    byId("adminSessionPanel").hidden = !authenticated;
-    uploadPanel.hidden = !authenticated;
-    if (authenticated) byId("adminSessionEmail").textContent = current.user?.email || "Administrador";
+    const current = session(), authenticated = Boolean(current?.access_token), admin = Boolean(window.ScannerAuth?.isAdmin);
+    byId("adminLoginPanel").hidden = true;
+    byId("adminSessionPanel").hidden = !admin;
+    uploadPanel.hidden = !admin;
+    if (admin) byId("adminSessionEmail").textContent = current.user?.email || "Administrador";
   }
   function adminHeaders() { return { "Content-Type": "application/json", Authorization: `Bearer ${session()?.access_token || ""}` }; }
   function sendRequest(path, options = {}) {
@@ -47,7 +47,7 @@
     catch(error){errorBox.textContent=error.message;errorBox.hidden=false;}
     finally{button.disabled=false;button.textContent="Entrar";}
   };
-  byId("adminLogout").onclick=()=>{window.ScannerBackend.signOut();resetImport();updateAuthUI();};
+  byId("adminLogout").onclick=()=>{resetImport();window.ScannerAuth?.logout?.();};
   updateAuthUI();
   function toast(title, message) {
     const element = byId("toast");
@@ -131,7 +131,7 @@
 
   async function syncEditorialAnalyses() {
     try {
-      const response = await fetch("/api/analyses"); if (!response.ok) return;
+      const response = await fetch("/api/analyses", { headers: { Authorization: `Bearer ${session()?.access_token || ""}` } }); if (!response.ok) return;
       const rows = await response.json();
       if (!rows.length) { games.splice(0, games.length); renderScanner(); renderWatchlist(); return; }
       const mapped = rows.map(row => ({ id: row.id, home: escapeHtml(row.home_team), away: escapeHtml(row.away_team), league: escapeHtml(row.competition),
@@ -159,5 +159,6 @@
       renderScanner(); renderWatchlist(); bindGames();
     } catch (error) { console.warn("Análises editoriais indisponíveis:", error.message); }
   }
-  syncEditorialAnalyses();
+  window.addEventListener("scannerday:authenticated", event => { updateAuthUI(); if (event.detail?.isAdmin) loadImports(); syncEditorialAnalyses(); });
+  if (session()?.access_token) syncEditorialAnalyses();
 })();
