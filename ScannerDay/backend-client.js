@@ -1,6 +1,6 @@
 (function () {
   const config = window.SCANNERDAY_CONFIG || {};
-  const state = { connected: false, demoMode: config.demoMode !== false, session: null };
+  const state = { connected: false, session: null };
 
   function configured() {
     return Boolean(config.supabaseUrl && config.supabaseAnonKey);
@@ -35,9 +35,8 @@
     try {
       await request("/rest/v1/leagues?select=id&limit=1");
       state.connected = true;
-      state.demoMode = false;
     } catch (error) {
-      console.warn("ScannerDay operando em modo demonstrativo:", error.message);
+      console.warn("ScannerDay sem conexão com o backend:", error.message);
     }
     return state;
   }

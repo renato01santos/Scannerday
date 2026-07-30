@@ -96,7 +96,8 @@
   async function syncEditorialAnalyses() {
     try {
       const response = await fetch("/api/analyses"); if (!response.ok) return;
-      const rows = await response.json(); if (!rows.length) return;
+      const rows = await response.json();
+      if (!rows.length) { games.splice(0, games.length); renderScanner(); renderWatchlist(); return; }
       const mapped = rows.map(row => ({ id: row.id, home: escapeHtml(row.home_team), away: escapeHtml(row.away_team), league: escapeHtml(row.competition),
         date: `${escapeHtml(row.match_date)} · ${escapeHtml(String(row.match_time || "").slice(0,5))}`, odd: Number(row.market_odd), prob: Number(row.scanner_probability),
         score: Number(row.scanner_score), classification: row.classification, book: escapeHtml(row.market || "Mercado"), form: "Editorial", xg: 0, xga: 0, move: 0,
@@ -108,7 +109,15 @@
       document.querySelector("#rankTable").innerHTML = games.map((g, i) => `<div class="rank-row"><b>${String(i + 1).padStart(2, "0")}</b><span>${g.home} × ${g.away}<small>${g.league}</small></span><span>${g.odd.toFixed(2)}</span><span>${g.prob.toFixed(1)}%</span>${ev(g)}<strong>${g.score}</strong>${badge(g)}</div>`).join("");
       document.querySelector("#historyTable").innerHTML = games.map(g => `<div class="history-line"><div><strong>${g.home} × ${g.away}</strong><small>${g.league} · ${g.date}</small></div><span>Odd ${g.odd.toFixed(2)}</span><span>Score ${g.score}</span><span class="result ${g.officialEntry ? "green-text" : ""}">${g.officialEntry ? "Oficial" : "Monitoramento"}</span><strong>${g.stake.toFixed(2)}u</strong></div>`).join("");
       const dashboardKpis = document.querySelectorAll("#dashboard-page .kpi strong");
-      if (dashboardKpis.length >= 4) { const maxEv = Math.max(...games.map(g => g.ev)); dashboardKpis[0].textContent = String(games.length).padStart(2, "0"); dashboardKpis[1].textContent = String(games.filter(g => grade(g) !== "Reprovado").length).padStart(2, "0"); dashboardKpis[2].textContent = String(games.filter(g => grade(g) === "Reprovado").length).padStart(2, "0"); dashboardKpis[3].textContent = `${maxEv >= 0 ? "+" : ""}${maxEv.toFixed(1)}%`; }
+      if (dashboardKpis.length >= 4) { const maxEv = Math.max(...games.map(g => g.ev)); dashboardKpis[0].textContent = String(games.length).padStart(2, "0"); dashboardKpis[1].textContent = String(games.filter(g => g.officialEntry).length).padStart(2, "0"); dashboardKpis[2].textContent = String(games.filter(g => grade(g) === "Reprovado").length).padStart(2, "0"); dashboardKpis[3].textContent = `${maxEv >= 0 ? "+" : ""}${maxEv.toFixed(1)}%`; const bestLabel=dashboardKpis[3].nextElementSibling;if(bestLabel){const best=games.reduce((a,b)=>b.ev>a.ev?b:a);bestLabel.textContent=`EV • ${best.home} × ${best.away}`;} }
+      const historyKpis = document.querySelectorAll("#history-page .simple-kpi strong");
+      if (historyKpis.length === 4) { historyKpis[0].textContent=games.length; historyKpis[1].textContent=games.filter(g=>g.officialEntry).length; historyKpis[2].textContent=games.filter(g=>!g.officialEntry&&grade(g)!=="Reprovado").length; historyKpis[3].textContent=games.filter(g=>grade(g)==="Reprovado").length; }
+      const marketNumbers=document.querySelectorAll('.market-numbers strong');
+      if(marketNumbers.length===3){marketNumbers[0].textContent=games.length;marketNumbers[1].textContent=new Set(games.map(g=>g.league)).size;marketNumbers[2].textContent='agora';}
+      const scoreAverage=Math.round(games.reduce((sum,g)=>sum+g.score,0)/games.length),scoreCard=document.querySelector('.score-card');
+      if(scoreCard){scoreCard.querySelector('.gauge-inner strong').textContent=scoreAverage;scoreCard.querySelector('.gauge-inner small').textContent='DADOS REAIS';scoreCard.querySelector('.trend').textContent='Importado';const counts={'A+':0,A:0,B:0,C:0};games.forEach(g=>{if(counts[grade(g)]!==undefined)counts[grade(g)]++;});scoreCard.querySelectorAll('.score-legend b').forEach((node,index)=>node.textContent=[counts['A+'],counts.A,counts.B,counts.C][index]);}
+      const leaguePanel=document.querySelector('.league-panel');
+      if(leaguePanel){const leagueCounts=Object.entries(games.reduce((acc,g)=>{acc[g.league]=(acc[g.league]||0)+1;return acc;},{})).sort((a,b)=>b[1]-a[1]);leaguePanel.innerHTML=`<div class="panel-head"><div><h2>Distribuição por liga</h2><p>Análises publicadas</p></div></div><div class="league-list">${leagueCounts.map(([league,count])=>`<span><i style="--c:#755cf5"></i>${league} <b>${count}</b></span>`).join('')}</div>`;}
       const scannerBadge = document.querySelector('[data-page="scanner"] b'); if (scannerBadge) scannerBadge.textContent = games.length;
       const best = games[0]; if (best) document.querySelector("#aiAnswer").innerHTML = `<span>SCANNER AI</span><h2>${best.home} × ${best.away}</h2><p>${best.explanation || "Análise editorial publicada."}</p><p><strong>Orientação:</strong> ${best.instruction || "Acompanhar o mercado."}</p><small>Análise estatística e informativa. Não constitui garantia de resultado.</small>`;
       renderScanner(); renderWatchlist(); bindGames();
