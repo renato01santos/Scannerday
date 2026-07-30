@@ -4,7 +4,7 @@ const { parseBody, validatePayload } = require("./_lib/analysis-validator");
 module.exports = async function handler(request, response) {
   if (request.method !== "POST") return response.status(405).json({ error: "Método não permitido" });
   try {
-    requireAdmin(request);
+    await requireAdmin(request);
     const body = parseBody(request);
     const payload = body?.payload || body;
     const validation = validatePayload(payload);

@@ -1,24 +1,28 @@
-const crypto = require("crypto");
+const { supabase } = require("./supabase");
 
-function safeEqual(left, right) {
-  const a = Buffer.from(String(left || ""));
-  const b = Buffer.from(String(right || ""));
-  return a.length === b.length && crypto.timingSafeEqual(a, b);
+function authError(message = "Não autorizado", statusCode = 401) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  return error;
 }
 
-function requireAdmin(request) {
-  const configured = process.env.ADMIN_IMPORT_SECRET;
-  if (!configured) {
-    const error = new Error("ADMIN_IMPORT_SECRET não configurado na Vercel");
-    error.statusCode = 503;
-    throw error;
-  }
-  const supplied = String(request.headers.authorization || "").replace(/^Bearer\s+/i, "");
-  if (!safeEqual(supplied, configured)) {
-    const error = new Error("Não autorizado");
-    error.statusCode = 401;
-    throw error;
-  }
+async function requireAdmin(request) {
+  const token = String(request.headers.authorization || "").replace(/^Bearer\s+/i, "").trim();
+  if (!token) throw authError("Faça login como administrador");
+
+  const url = process.env.SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceKey) throw authError("Supabase não configurado no servidor", 503);
+
+  const userResponse = await fetch(`${url}/auth/v1/user`, {
+    headers: { apikey: serviceKey, Authorization: `Bearer ${token}` }
+  });
+  if (!userResponse.ok) throw authError("Sessão expirada. Entre novamente.");
+  const user = await userResponse.json();
+
+  const profiles = await supabase(`profiles?id=eq.${encodeURIComponent(user.id)}&select=id,role&limit=1`);
+  if (!profiles?.length || profiles[0].role !== "admin") throw authError("Esta conta não possui permissão administrativa", 403);
+  return user;
 }
 
 module.exports = { requireAdmin };

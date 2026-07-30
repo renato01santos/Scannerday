@@ -4,18 +4,32 @@
   let parsedPayload = null;
   const byId = id => document.getElementById(id);
   const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
-  const secretInput = byId("adminSecret");
-  secretInput.value = sessionStorage.getItem("scannerday-admin-secret") || "";
-  secretInput.addEventListener("input", () => sessionStorage.setItem("scannerday-admin-secret", secretInput.value));
-
-  function adminHeaders() { return { "Content-Type": "application/json", Authorization: `Bearer ${secretInput.value.trim()}` }; }
+  const uploadPanel = document.querySelector("#admin-import-page .upload-panel");
+  function session() { return window.ScannerBackend?.state?.session || null; }
+  function updateAuthUI() {
+    const current = session(), authenticated = Boolean(current?.access_token);
+    byId("adminLoginPanel").hidden = authenticated;
+    byId("adminSessionPanel").hidden = !authenticated;
+    uploadPanel.hidden = !authenticated;
+    if (authenticated) byId("adminSessionEmail").textContent = current.user?.email || "Administrador";
+  }
+  function adminHeaders() { return { "Content-Type": "application/json", Authorization: `Bearer ${session()?.access_token || ""}` }; }
   async function api(path, options = {}) {
-    if (!secretInput.value.trim()) throw new Error("Informe a chave administrativa.");
+    await window.ScannerBackend.ensureSession();
     const response = await fetch(path, { ...options, headers: { ...adminHeaders(), ...options.headers } });
     const data = response.status === 204 ? null : await response.json().catch(() => ({}));
+    if (response.status === 401) { window.ScannerBackend.signOut(); updateAuthUI(); }
     if (!response.ok) throw new Error(data?.error || data?.errors?.[0]?.message || `Erro ${response.status}`);
     return data;
   }
+  byId("adminLogin").onclick = async () => {
+    const button=byId("adminLogin"),errorBox=byId("adminLoginError");button.disabled=true;button.textContent="Entrando…";errorBox.hidden=true;
+    try { await window.ScannerBackend.signIn(byId("adminEmail").value.trim(),byId("adminPassword").value);byId("adminPassword").value="";updateAuthUI();toast("Login realizado","A área de importação está liberada."); }
+    catch(error){errorBox.textContent=error.message;errorBox.hidden=false;}
+    finally{button.disabled=false;button.textContent="Entrar";}
+  };
+  byId("adminLogout").onclick=()=>{window.ScannerBackend.signOut();resetImport();updateAuthUI();};
+  updateAuthUI();
   function toast(title, message) {
     const element = byId("toast");
     element.querySelector("strong").textContent = title;
@@ -91,7 +105,10 @@
     catch (error) { toast("Falha ao excluir", error.message); }
   }
   byId("refreshImports").onclick = loadImports;
-  document.querySelector('[data-page="admin-imports"]').addEventListener("click", loadImports);
+  document.querySelector('[data-page="admin-imports"]').addEventListener("click", () => {
+    if (!session()?.access_token) { navigate("admin-import"); byId("adminLoginError").textContent="Entre como administrador para acessar o histórico."; byId("adminLoginError").hidden=false; return; }
+    loadImports();
+  });
 
   async function syncEditorialAnalyses() {
     try {

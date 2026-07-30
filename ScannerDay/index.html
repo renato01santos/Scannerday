@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="premium.css" />
   <link rel="stylesheet" href="admin.css" />
+  <link rel="stylesheet" href="admin-login.css" />
 </head>
 <body>
   <div class="app-shell">
@@ -82,7 +83,8 @@
 
         <section class="page" id="admin-import-page">
           <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · FLUXO EDITORIAL</p><h1>Importar Arquivo ScannerDay</h1><p>Valide, revise e publique análises estruturadas sem reiniciar o sistema.</p></div><span class="admin-secure">● AMBIENTE PROTEGIDO</span></div>
-          <section class="panel admin-auth-panel"><label>Chave administrativa <input id="adminSecret" type="password" autocomplete="off" placeholder="ADMIN_IMPORT_SECRET" /></label><small>A chave fica somente nesta sessão do navegador.</small></section>
+          <section class="panel admin-auth-panel" id="adminLoginPanel"><div class="admin-login-copy"><strong>Acesso administrativo</strong><small>Entre uma vez para validar e publicar arquivos com segurança.</small></div><div class="admin-login-fields"><label>E-mail <input id="adminEmail" type="email" autocomplete="username" placeholder="admin@seudominio.com" /></label><label>Senha <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Sua senha" /></label><button class="scan-btn" id="adminLogin" type="button">Entrar</button></div><p class="admin-login-error" id="adminLoginError" hidden></p></section>
+          <section class="panel admin-session-panel" id="adminSessionPanel" hidden><div><span class="admin-secure">● ADMIN AUTENTICADO</span><strong id="adminSessionEmail"></strong></div><button class="ghost-btn" id="adminLogout" type="button">Sair</button></section>
           <section class="panel upload-panel"><input id="analysisFile" type="file" accept=".json,application/json" hidden /><div class="drop-zone" id="analysisDropZone" tabindex="0"><span>⇧</span><h2>Arraste o JSON aqui</h2><p>ou selecione um arquivo de até 10 MB</p><button class="scan-btn" type="button" id="selectAnalysisFile">Selecionar arquivo</button><small id="selectedFileName">Nenhum arquivo selecionado</small></div><div class="upload-progress" id="uploadProgress"><i></i></div><div class="admin-actions"><button class="scan-btn" id="validateAnalysisFile" disabled>Validar arquivo</button><button class="ghost-btn" id="cancelAnalysisImport" type="button">Cancelar</button></div></section>
           <section class="panel validation-result" id="validationResult" hidden></section>
           <section id="analysisPreview" hidden><div class="panel-head preview-head"><div><h2>Prévia</h2><p>Confira todos os registros antes da publicação.</p></div><button class="scan-btn" id="publishAnalyses">Publicar</button></div><div class="import-preview-grid" id="analysisPreviewGrid"></div></section>

@@ -60,6 +60,26 @@
     return session;
   }
 
+  async function refreshSession() {
+    if (!state.session?.refresh_token) throw new Error("Sessão expirada. Entre novamente.");
+    const response = await fetch(`${config.supabaseUrl}/auth/v1/token?grant_type=refresh_token`, {
+      method: "POST",
+      headers: { apikey: config.supabaseAnonKey, Authorization: `Bearer ${config.supabaseAnonKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh_token: state.session.refresh_token })
+    });
+    const refreshed = await response.json().catch(() => ({}));
+    if (!response.ok) { signOut(); throw new Error(refreshed?.msg || refreshed?.error_description || "Sessão expirada. Entre novamente."); }
+    state.session = refreshed;
+    localStorage.setItem("scannerday-session", JSON.stringify(refreshed));
+    return refreshed;
+  }
+
+  async function ensureSession() {
+    if (!state.session?.access_token) throw new Error("Faça login como administrador.");
+    if (state.session.expires_at && state.session.expires_at * 1000 <= Date.now() + 60000) return refreshSession();
+    return state.session;
+  }
+
   function signOut() {
     state.session = null;
     localStorage.removeItem("scannerday-session");
@@ -97,5 +117,5 @@
     try { state.session = JSON.parse(saved); } catch (_) { localStorage.removeItem("scannerday-session"); }
   }
 
-  window.ScannerBackend = { state, configured, init, signUp, signIn, signOut, listGames, listHistory, getScannerWeights, getServiceStatus, toggleWatchlist };
+  window.ScannerBackend = { state, configured, init, signUp, signIn, refreshSession, ensureSession, signOut, listGames, listHistory, getScannerWeights, getServiceStatus, toggleWatchlist };
 })();

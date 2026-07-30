@@ -3,7 +3,7 @@ const { supabase } = require("../_lib/supabase");
 
 module.exports = async function handler(request, response) {
   try {
-    requireAdmin(request);
+    await requireAdmin(request);
     const id = encodeURIComponent(request.query.id);
     if (request.method === "GET") {
       const rows = await supabase(`imports?id=eq.${id}&select=*,analyses(*,predicted_scores(*),strengths(*),risks(*))&limit=1`);
