@@ -1,0 +1,4 @@
+const { supabase } = require("./_lib/supabase");
+const { requireAdmin } = require("./_lib/admin-auth");
+const { validateTips } = require("./_lib/tip-validator");
+module.exports=async function handler(request,response){if(request.method!=="POST")return response.status(405).json({error:"Método não permitido"});try{const admin=await requireAdmin(request),body=typeof request.body==="string"?JSON.parse(request.body):request.body,tips=validateTips(body?.payload);const result=await supabase("rpc/publish_suggested_tips",{method:"POST",body:JSON.stringify({payload:{...body.payload,tips},source_file_name:body.file_name||"scannerday-tips-v1.json",importing_user:admin.id})});return response.status(201).json(result);}catch(error){return response.status(error.statusCode||500).json({error:error.message});}};
