@@ -14,10 +14,25 @@
     if (authenticated) byId("adminSessionEmail").textContent = current.user?.email || "Administrador";
   }
   function adminHeaders() { return { "Content-Type": "application/json", Authorization: `Bearer ${session()?.access_token || ""}` }; }
+  function sendRequest(path, options = {}) {
+    return new Promise((resolve, reject) => {
+      const request = new XMLHttpRequest();
+      request.open(options.method || "GET", path, true);
+      Object.entries({ ...adminHeaders(), ...options.headers }).forEach(([name, value]) => request.setRequestHeader(name, value));
+      request.onload = () => {
+        const data = request.status === 204 ? null : (() => { try { return JSON.parse(request.responseText || "{}"); } catch (_) { return {}; } })();
+        resolve({ status: request.status, ok: request.status >= 200 && request.status < 300, data });
+      };
+      request.onerror = () => reject(new Error("A conexão com a API foi bloqueada pelo navegador. Desative temporariamente bloqueadores de anúncios ou a proteção web para scannerday.vercel.app."));
+      request.ontimeout = () => reject(new Error("A API demorou para responder. Tente novamente."));
+      request.timeout = 30000;
+      request.send(options.body || null);
+    });
+  }
   async function api(path, options = {}, retried = false) {
     await window.ScannerBackend.ensureSession();
-    const response = await fetch(path, { ...options, headers: { ...adminHeaders(), ...options.headers } });
-    const data = response.status === 204 ? null : await response.json().catch(() => ({}));
+    const response = await sendRequest(path, options);
+    const data = response.data;
     if (response.status === 401 && !retried) {
       try { await window.ScannerBackend.refreshSession(); return api(path, options, true); }
       catch (_) { window.ScannerBackend.signOut(); updateAuthUI(); throw new Error("Sessão expirada. Entre novamente."); }
