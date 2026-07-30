@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="premium.css" />
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
   <div class="app-shell">
@@ -25,6 +26,8 @@
         <button class="nav-item" data-page="watchlist"><span>☆</span> Watchlist <b id="watchCount">0</b></button>
         <button class="nav-item" data-page="ai"><span>✦</span> Scanner AI</button>
         <p class="nav-label">GESTÃO</p>
+        <button class="nav-item" data-page="admin-import"><span>⇧</span> Importar análises</button>
+        <button class="nav-item" data-page="admin-imports"><span>▤</span> Histórico de importações</button>
         <button class="nav-item" data-page="settings"><span>⚙</span> Configurações</button>
       </nav>
       <div class="sidebar-card"><div class="pulse"></div><div><strong>Scanner ativo</strong><small>Próxima varredura às 06:00</small></div></div>
@@ -76,6 +79,19 @@
         <section class="page" id="stats-page"><div class="page-heading"><div><p class="eyebrow">INTELIGÊNCIA HISTÓRICA</p><h1>Estatísticas</h1><p>Entenda onde o modelo entrega mais valor.</p></div></div><div class="kpis"><article class="simple-kpi"><span>TAXA DE ACERTO</span><strong>69.5%</strong><small class="green-text">↗ 3.2% no mês</small></article><article class="simple-kpi"><span>ROI</span><strong>14.38%</strong></article><article class="simple-kpi"><span>YIELD</span><strong>9.74%</strong></article><article class="simple-kpi"><span>LUCRO</span><strong class="green-text">+38.42u</strong></article></div><div class="stats-grid"><section class="panel"><div class="panel-head"><div><h2>Performance por faixa de odds</h2><p>Últimos 90 dias</p></div></div><div class="bar-stat"><label>1.25—1.35 <b>+8.2u</b></label><div><i style="width:48%"></i></div></div><div class="bar-stat"><label>1.36—1.45 <b>+17.6u</b></label><div><i style="width:86%"></i></div></div><div class="bar-stat"><label>1.46—1.60 <b>+12.6u</b></label><div><i style="width:64%"></i></div></div></section><section class="panel"><div class="panel-head"><div><h2>Performance por classificação</h2><p>ROI médio</p></div></div><div class="class-performance"><span><i class="badge grade-ap">A+</i><strong>21.4%</strong><small>42 entradas</small></span><span><i class="badge grade-a">A</i><strong>14.8%</strong><small>36 entradas</small></span><span><i class="badge grade-b">B</i><strong>7.2%</strong><small>31 entradas</small></span><span><i class="badge grade-c">C</i><strong>2.1%</strong><small>19 entradas</small></span></div></section></div></section>
 
         <section class="page" id="settings-page"><div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Configurações</h1><p>Ajuste os critérios e pesos do modelo.</p></div><button class="scan-btn" id="saveSettings">Salvar alterações</button></div><div class="settings-grid"><section class="panel settings-card"><div class="panel-head"><div><h2>Parâmetros do scanner</h2><p>Critérios da etapa inicial</p></div></div><label>Odd mínima <input type="number" value="1.25" step="0.01"></label><label>Odd máxima <input type="number" value="1.60" step="0.01"></label><label>Janela de pesquisa <select><option>Próximos 3 dias</option><option>Próximos 5 dias</option><option>Próximos 7 dias</option></select></label><label class="toggle-row">Somente favorito visitante <input type="checkbox" checked><i></i></label></section><section class="panel settings-card"><div class="panel-head"><div><h2>Pesos do ScannerScore</h2><p>Total: <strong id="weightTotal">100</strong> pontos</p></div></div><div id="weights"></div></section></div></section>
+
+        <section class="page" id="admin-import-page">
+          <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · FLUXO EDITORIAL</p><h1>Importar Arquivo ScannerDay</h1><p>Valide, revise e publique análises estruturadas sem reiniciar o sistema.</p></div><span class="admin-secure">● AMBIENTE PROTEGIDO</span></div>
+          <section class="panel admin-auth-panel"><label>Chave administrativa <input id="adminSecret" type="password" autocomplete="off" placeholder="ADMIN_IMPORT_SECRET" /></label><small>A chave fica somente nesta sessão do navegador.</small></section>
+          <section class="panel upload-panel"><input id="analysisFile" type="file" accept=".json,application/json" hidden /><div class="drop-zone" id="analysisDropZone" tabindex="0"><span>⇧</span><h2>Arraste o JSON aqui</h2><p>ou selecione um arquivo de até 10 MB</p><button class="scan-btn" type="button" id="selectAnalysisFile">Selecionar arquivo</button><small id="selectedFileName">Nenhum arquivo selecionado</small></div><div class="upload-progress" id="uploadProgress"><i></i></div><div class="admin-actions"><button class="scan-btn" id="validateAnalysisFile" disabled>Validar arquivo</button><button class="ghost-btn" id="cancelAnalysisImport" type="button">Cancelar</button></div></section>
+          <section class="panel validation-result" id="validationResult" hidden></section>
+          <section id="analysisPreview" hidden><div class="panel-head preview-head"><div><h2>Prévia</h2><p>Confira todos os registros antes da publicação.</p></div><button class="scan-btn" id="publishAnalyses">Publicar</button></div><div class="import-preview-grid" id="analysisPreviewGrid"></div></section>
+        </section>
+
+        <section class="page" id="admin-imports-page">
+          <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · AUDITORIA</p><h1>Histórico de Importações</h1><p>Rastreabilidade completa dos lotes editoriais publicados.</p></div><button class="scan-btn" id="refreshImports">Atualizar</button></div>
+          <section class="panel imports-panel"><div class="imports-head"><span>Data</span><span>Arquivo</span><span>Quantidade</span><span>Responsável</span><span>Status</span><span>Ações</span></div><div id="importsTable"><div class="admin-empty">Informe a chave administrativa para carregar o histórico.</div></div></section>
+        </section>
       </div>
     </main>
   </div>
@@ -84,5 +100,6 @@
   <script src="config.js"></script>
   <script src="backend-client.js"></script>
   <script src="app.js"></script>
+  <script src="admin.js"></script>
 </body>
 </html>

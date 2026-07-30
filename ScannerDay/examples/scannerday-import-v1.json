@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-07-29T18:00:00-03:00",
+  "methodology": "ScannerDay Premium",
+  "analyses": [
+    {
+      "competition": "Brasileirão Série A",
+      "match": {
+        "home_team": "Internacional",
+        "away_team": "Flamengo",
+        "date": "2026-07-29",
+        "time": "19:30",
+        "stadium": "Beira-Rio"
+      },
+      "market": {
+        "selection": "Flamengo",
+        "market": "Away Win",
+        "market_odd": 1.95,
+        "minimum_entry_odd": 1.93
+      },
+      "scanner": {
+        "scanner_probability": 54,
+        "market_probability": 51.3,
+        "fair_odd": 1.85,
+        "expected_value": 5.3,
+        "scanner_score": 84,
+        "confidence": 76,
+        "classification": "A",
+        "status": "Approved"
+      },
+      "predicted_scores": [
+        { "score": "1x2", "probability": 11 },
+        { "score": "1x1", "probability": 13 }
+      ],
+      "strengths": ["Melhor ataque", "Melhor momento"],
+      "risks": ["Jogo fora"],
+      "scanner_explain": "Análise estatística completa da partida.",
+      "recommendation": {
+        "official_entry": true,
+        "stake": 0.75,
+        "instruction": "Entrar acima de 1.93"
+      }
+    }
+  ]
+}
