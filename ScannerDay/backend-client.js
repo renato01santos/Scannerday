@@ -64,7 +64,7 @@
     if (!state.session?.refresh_token) throw new Error("Sessão expirada. Entre novamente.");
     const response = await fetch(`${config.supabaseUrl}/auth/v1/token?grant_type=refresh_token`, {
       method: "POST",
-      headers: { apikey: config.supabaseAnonKey, Authorization: `Bearer ${config.supabaseAnonKey}`, "Content-Type": "application/json" },
+      headers: { apikey: config.supabaseAnonKey, "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: state.session.refresh_token })
     });
     const refreshed = await response.json().catch(() => ({}));
@@ -76,7 +76,6 @@
 
   async function ensureSession() {
     if (!state.session?.access_token) throw new Error("Faça login como administrador.");
-    if (state.session.expires_at && state.session.expires_at * 1000 <= Date.now() + 60000) return refreshSession();
     return state.session;
   }
 

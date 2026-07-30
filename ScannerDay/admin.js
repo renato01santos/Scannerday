@@ -14,10 +14,14 @@
     if (authenticated) byId("adminSessionEmail").textContent = current.user?.email || "Administrador";
   }
   function adminHeaders() { return { "Content-Type": "application/json", Authorization: `Bearer ${session()?.access_token || ""}` }; }
-  async function api(path, options = {}) {
+  async function api(path, options = {}, retried = false) {
     await window.ScannerBackend.ensureSession();
     const response = await fetch(path, { ...options, headers: { ...adminHeaders(), ...options.headers } });
     const data = response.status === 204 ? null : await response.json().catch(() => ({}));
+    if (response.status === 401 && !retried) {
+      try { await window.ScannerBackend.refreshSession(); return api(path, options, true); }
+      catch (_) { window.ScannerBackend.signOut(); updateAuthUI(); throw new Error("Sessão expirada. Entre novamente."); }
+    }
     if (response.status === 401) { window.ScannerBackend.signOut(); updateAuthUI(); }
     if (!response.ok) throw new Error(data?.error || data?.errors?.[0]?.message || `Erro ${response.status}`);
     return data;
