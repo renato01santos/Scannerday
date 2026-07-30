@@ -46,20 +46,20 @@
         <button class="nav-item" data-page="admin-imports" data-admin-only><span>▤</span> Histórico de importações</button>
         <button class="nav-item" data-page="settings" data-admin-only><span>⚙</span> Configurações</button>
       </nav>
-      <div class="sidebar-card"><div class="pulse"></div><div><strong>Carregando dados</strong><small>Aguardando o Supabase</small></div></div>
+      <div class="sidebar-card" data-admin-only><div class="pulse"></div><div><strong>Carregando dados</strong><small>Aguardando o Supabase</small></div></div>
       <div class="sidebar-footer"><div class="avatar" id="accountAvatar">U</div><div><strong id="accountName">Usuário</strong><small id="accountRole">Conta ScannerDay</small></div><button id="sidebarLogout" title="Sair">↪</button></div>
     </aside>
 
     <main>
       <header class="topbar">
         <button class="menu-btn" id="menuBtn">☰</button>
-        <div class="market-status"><span></span> Verificando backend <b>aguarde</b></div>
+        <div class="market-status" data-admin-only><span></span> Verificando backend <b>aguarde</b></div>
         <div class="top-actions"><span class="role-pill" id="rolePill">USUÁRIO</span><button class="icon-btn">?</button><button class="icon-btn alert">♢</button><button class="scan-btn" id="scanBtn">⌁ Executar scanner</button></div>
       </header>
 
       <div class="content">
         <section class="page active" id="dashboard-page">
-          <div class="page-heading"><div><p class="eyebrow">DADOS EDITORIAIS</p><h1>Visão geral.</h1><p>Somente análises reais importadas e publicadas.</p></div><div class="window-pill">Origem <strong>SUPABASE</strong></div></div>
+          <div class="page-heading"><div><p class="eyebrow" id="dashboardEyebrow">ANÁLISES SCANNERDAY</p><h1 id="dashboardTitle">Suas oportunidades.</h1><p id="dashboardSubtitle">Veja as análises publicadas e as apostas sugeridas.</p></div><div class="window-pill" data-admin-only>Origem <strong>SUPABASE</strong></div></div>
 
           <div class="kpis">
             <article class="kpi"><div class="kpi-icon purple">⌖</div><div><span>ANÁLISES IMPORTADAS</span><strong>00</strong><small>Dados publicados</small></div></article>
@@ -68,7 +68,7 @@
             <article class="kpi highlight"><div><span>MAIOR EV IMPORTADO</span><strong>—</strong><small>Nenhum dado publicado</small></div><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
           </div>
 
-          <div class="ops-grid">
+          <div class="ops-grid" data-admin-only>
             <section class="panel scanner-status"><div class="panel-head"><div><h2>Base editorial</h2><p>Análises importadas</p></div><span class="live-pill"><i></i> REAL</span></div><div class="status-times"><div><span>ÚLTIMA IMPORTAÇÃO</span><strong>—</strong><small>Aguardando dados</small></div><div><span>ORIGEM</span><strong>JSON</strong><small>Validado no servidor</small></div><div><span>ARMAZENAMENTO</span><strong>SQL</strong><small>Supabase</small></div></div></section>
             <section class="panel api-status"><div class="panel-head"><div><h2>Status das APIs</h2><p>Saúde das integrações</p></div><span class="all-systems">4 serviços</span></div><div class="api-grid"><span><i></i>API de Jogos <b>Verificando</b></span><span><i></i>API de Odds <b>Verificando</b></span><span><i></i>API Estatística <b>Verificando</b></span><span><i></i>API IA <b>Verificando</b></span></div></section>
             <section class="panel market-card"><div class="panel-head"><div><h2>Base publicada</h2><p>Dados carregados</p></div><span class="live-pill"><i></i> REAL</span></div><div class="market-numbers"><div><strong>0</strong><span>ANÁLISES</span></div><div><strong>0</strong><span>LIGAS</span></div><div><strong>—</strong><span>ATUALIZAÇÃO</span></div></div></section>

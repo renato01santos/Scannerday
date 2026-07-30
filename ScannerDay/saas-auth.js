@@ -24,6 +24,10 @@
     byId("accountAvatar").textContent = initials(profile?.name || session.user?.email);
     byId("accountRole").textContent = admin ? "Administrador" : "Conta ScannerDay";
     byId("rolePill").textContent = admin ? "ADMINISTRADOR" : "USUÁRIO";
+    byId("dashboardEyebrow").textContent = admin ? "PAINEL ADMINISTRATIVO" : "ANÁLISES SCANNERDAY";
+    byId("dashboardTitle").textContent = admin ? "Visão operacional." : "Suas oportunidades.";
+    byId("dashboardSubtitle").textContent = admin ? "Acompanhe dados, integrações e análises publicadas." : "Veja as análises completas e as apostas sugeridas pela equipe.";
+    byId("scanBtn").textContent = admin ? "⌁ Executar scanner" : "Ver análises";
     gate.hidden = true; shell.hidden = false;
     window.ScannerAuth = { profile, isAdmin: admin, logout };
     window.dispatchEvent(new CustomEvent("scannerday:authenticated", { detail: window.ScannerAuth }));
