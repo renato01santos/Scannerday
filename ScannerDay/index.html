@@ -36,6 +36,7 @@
       <nav id="nav">
         <button class="nav-item active" data-page="dashboard"><span>⌁</span> Visão geral</button>
         <button class="nav-item" data-page="scanner"><span>⌖</span> Scanner <b>0</b></button>
+        <button class="nav-item" data-page="suggested-bets"><span>★</span> Aposta sugerida</button>
         <button class="nav-item" data-page="ranking"><span>↗</span> Ranking</button>
         <button class="nav-item" data-page="history"><span>◷</span> Histórico</button>
         <button class="nav-item" data-page="stats"><span>◫</span> Estatísticas</button>
@@ -45,6 +46,7 @@
         <p class="nav-label" data-admin-only>GESTÃO ADMINISTRATIVA</p>
         <button class="nav-item" data-page="admin-import" data-admin-only><span>⇧</span> Importar análises</button>
         <button class="nav-item" data-page="admin-imports" data-admin-only><span>▤</span> Histórico de importações</button>
+        <button class="nav-item" data-page="admin-bet" data-admin-only><span>＋</span> Cadastrar aposta</button>
         <button class="nav-item" data-page="settings" data-admin-only><span>⚙</span> Configurações</button>
       </nav>
       <div class="sidebar-card" data-admin-only><div class="pulse"></div><div><strong>Carregando dados</strong><small>Aguardando o Supabase</small></div></div>
@@ -110,6 +112,34 @@
           <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · AUDITORIA</p><h1>Histórico de Importações</h1><p>Rastreabilidade completa dos lotes editoriais publicados.</p></div><button class="scan-btn" id="refreshImports">Atualizar</button></div>
           <section class="panel imports-panel"><div class="imports-head"><span>Data</span><span>Arquivo</span><span>Quantidade</span><span>Responsável</span><span>Status</span><span>Ações</span></div><div id="importsTable"><div class="admin-empty">Informe a chave administrativa para carregar o histórico.</div></div></section>
         </section>
+
+        <section class="page" id="suggested-bets-page">
+          <div class="page-heading"><div><p class="eyebrow">RECOMENDAÇÕES DA EQUIPE</p><h1>Apostas sugeridas</h1><p>Entradas publicadas pelo administrador com análise, odd e gestão de stake.</p></div></div>
+          <div class="suggested-bets-grid" id="suggestedBetsGrid"><section class="panel premium-empty"><h2>Nenhuma aposta publicada</h2><p>As recomendações da equipe aparecerão aqui.</p></section></div>
+        </section>
+
+        <section class="page" id="admin-bet-page">
+          <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · CONTEÚDO</p><h1>Cadastrar aposta sugerida</h1><p>Preencha os campos ou carregue um JSON para publicar uma nova recomendação.</p></div><span class="admin-secure">● SOMENTE ADMIN</span></div>
+          <section class="panel suggested-bet-admin">
+            <div class="bet-json-upload"><input id="suggestedBetFile" type="file" accept=".json,application/json" hidden><button class="ghost-btn" id="selectSuggestedBetFile" type="button">Carregar JSON</button><small id="suggestedBetFileName">Nenhum arquivo selecionado</small></div>
+            <form id="suggestedBetForm" class="suggested-bet-form">
+              <label>Competição<input id="betCompetition" required placeholder="Brasileirão Série A"></label>
+              <label>Mandante<input id="betHomeTeam" required placeholder="Time mandante"></label>
+              <label>Visitante<input id="betAwayTeam" required placeholder="Time visitante"></label>
+              <label>Data<input id="betMatchDate" type="date" required></label>
+              <label>Horário<input id="betMatchTime" type="time"></label>
+              <label>Mercado<input id="betMarket" required placeholder="Resultado final"></label>
+              <label>Seleção sugerida<input id="betSelection" required placeholder="Vitória do mandante"></label>
+              <label>Odd de entrada<input id="betOdd" type="number" min="1.01" step="0.01" required></label>
+              <label>Stake sugerida<input id="betStake" type="number" min="0" step="0.10" value="1" required></label>
+              <label>Confiança (%)<input id="betConfidence" type="number" min="0" max="100" value="70" required></label>
+              <label class="bet-analysis-field">Análise e justificativa<textarea id="betAnalysis" required placeholder="Explique os dados e motivos desta entrada..."></textarea></label>
+              <label class="bet-analysis-field">Orientação<textarea id="betInstruction" placeholder="Orientação adicional para o usuário..."></textarea></label>
+              <div class="bet-form-actions"><button class="scan-btn" type="submit">Publicar aposta sugerida</button></div>
+            </form>
+            <p class="admin-login-error" id="suggestedBetError" hidden></p>
+          </section>
+        </section>
       </div>
     </main>
   </div>
@@ -120,5 +150,6 @@
   <script src="saas-auth.js"></script>
   <script src="app.js"></script>
   <script src="editor.js"></script>
+  <script src="suggested-bets.js"></script>
 </body>
 </html>
