@@ -76,14 +76,14 @@
   byId("validateAnalysisFile").onclick = async () => {
     try {
       setProgress(35); parsedPayload = JSON.parse(await selectedFile.text()); setProgress(60);
-      const result = await api("/api/validate-analysis", { method: "POST", body: JSON.stringify({ file_name: selectedFile.name, payload: parsedPayload }) });
+      const result = await api("/api/admin-validate", { method: "POST", body: JSON.stringify({ file_name: selectedFile.name, payload: parsedPayload }) });
       showValidation(result.errors); renderPreview(parsedPayload); setProgress(100);
     } catch (error) { parsedPayload = null; showValidation([{ path: "arquivo", message: error.message }]); setProgress(0); }
   };
   byId("publishAnalyses").onclick = async () => {
     const button = byId("publishAnalyses"); button.disabled = true; button.textContent = "Publicando…";
     try {
-      const result = await api("/api/import-analysis", { method: "POST", body: JSON.stringify({ file_name: selectedFile.name, payload: parsedPayload }) });
+      const result = await api("/api/admin-import", { method: "POST", body: JSON.stringify({ file_name: selectedFile.name, payload: parsedPayload }) });
       toast("Importação concluída", `${result.analyses} análises · ${result.official_entries} oficiais · ${result.monitoring} monitoramento · ${result.rejected} descartadas`);
       resetImport(); await syncEditorialAnalyses();
     } catch (error) { showValidation([{ path: "publicação", message: error.message }]); }
