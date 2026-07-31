@@ -2,9 +2,15 @@ const { supabase } = require("./_lib/supabase");
 const { requireAdmin } = require("./_lib/admin-auth");
 
 module.exports = async function handler(request, response) {
-  if (request.method !== "POST") return response.status(405).json({ error: "Método não permitido" });
   try {
     const user = await requireAdmin(request);
+    if (request.method === "DELETE") {
+      const id = String(request.query?.id || "").trim();
+      if (!id) return response.status(422).json({ error: "ID da aposta não informado" });
+      await supabase(`suggested_bets?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } });
+      return response.status(200).json({ ok: true });
+    }
+    if (request.method !== "POST") return response.status(405).json({ error: "Método não permitido" });
     const body = typeof request.body === "string" ? JSON.parse(request.body) : request.body;
     const required = ["tip_id","competition","home_team","away_team","match_date","market","selection","analysis"];
     const missing = required.find(key => !String(body?.[key] || "").trim());

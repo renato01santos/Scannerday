@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="admin-login.css" />
   <link rel="stylesheet" href="saas-auth.css" />
   <link rel="stylesheet" href="bolaoday-theme.css" />
+  <link rel="stylesheet" href="mvp.css?v=1" />
   <style>[hidden]{display:none!important}</style>
 </head>
 <body>
@@ -37,17 +38,14 @@
         <button class="nav-item active" data-page="dashboard"><span>⌁</span> Visão geral</button>
         <button class="nav-item" data-page="scanner"><span>⌖</span> Scanner <b>0</b></button>
         <button class="nav-item" data-page="suggested-bets"><span>★</span> Aposta sugerida</button>
-        <button class="nav-item" data-page="ranking"><span>↗</span> Ranking</button>
-        <button class="nav-item" data-page="history"><span>◷</span> Histórico</button>
-        <button class="nav-item" data-page="stats"><span>◫</span> Estatísticas</button>
-        <button class="nav-item" data-page="finance"><span>◈</span> Financeiro</button>
-        <button class="nav-item" data-page="watchlist"><span>☆</span> Watchlist <b id="watchCount">0</b></button>
-        <button class="nav-item" data-page="ai"><span>✦</span> Scanner AI</button>
+        <button class="nav-item" data-page="results"><span>✓</span> Resultados</button>
+        <span id="watchCount" hidden>0</span>
         <p class="nav-label" data-admin-only>GESTÃO ADMINISTRATIVA</p>
+        <button class="nav-item" data-page="admin-dashboard" data-admin-only><span>▦</span> Dashboard admin</button>
         <button class="nav-item" data-page="admin-import" data-admin-only><span>⇧</span> Importar análises</button>
         <button class="nav-item" data-page="admin-imports" data-admin-only><span>▤</span> Histórico de importações</button>
-        <button class="nav-item" data-page="admin-bet" data-admin-only><span>＋</span> Cadastrar aposta</button>
-        <button class="nav-item" data-page="settings" data-admin-only><span>⚙</span> Configurações</button>
+        <button class="nav-item" data-page="admin-bet" data-admin-only><span>＋</span> Apostas sugeridas</button>
+        <button class="nav-item" data-page="admin-users" data-admin-only><span>♙</span> Usuários</button>
       </nav>
       <div class="sidebar-card" data-admin-only><div class="pulse"></div><div><strong>Carregando dados</strong><small>Aguardando o Supabase</small></div></div>
       <div class="sidebar-footer"><div class="avatar" id="accountAvatar">U</div><div><strong id="accountName">Usuário</strong><small id="accountRole">Conta ScannerDay</small></div><button id="sidebarLogout" title="Sair">↪</button></div>
@@ -57,7 +55,7 @@
       <header class="topbar">
         <button class="menu-btn" id="menuBtn">☰</button>
         <div class="market-status" data-admin-only><span></span> Verificando backend <b>aguarde</b></div>
-        <div class="top-actions"><span class="role-pill" id="rolePill">USUÁRIO</span><button class="icon-btn">?</button><button class="icon-btn alert">♢</button><button class="scan-btn" id="scanBtn">⌁ Executar scanner</button></div>
+        <div class="top-actions"><span class="role-pill" id="rolePill">USUÁRIO</span><button class="icon-btn">?</button><button class="icon-btn alert">♢</button><button class="scan-btn" id="scanBtn" hidden>Scanner</button></div>
       </header>
 
       <div class="content">
@@ -118,6 +116,12 @@
           <div class="suggested-bets-grid" id="suggestedBetsGrid"><section class="panel premium-empty"><h2>Nenhuma aposta publicada</h2><p>As recomendações da equipe aparecerão aqui.</p></section></div>
         </section>
 
+        <section class="page" id="results-page"><div class="page-heading"><div><p class="eyebrow">DESEMPENHO REAL</p><h1>Resultados</h1><p>Métricas calculadas somente com apostas liquidadas.</p></div></div><div id="mvpResults"></div></section>
+
+        <section class="page" id="admin-dashboard-page"><div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Dashboard administrativo</h1><p>Visão objetiva da operação ScannerDay.</p></div></div><div id="adminDashboardContent"></div></section>
+
+        <section class="page" id="admin-users-page"><div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Usuários</h1><p>Contas, planos e atividade da plataforma.</p></div></div><section class="panel mvp-table" id="adminUsersTable"><div class="admin-empty">Carregando usuários…</div></section></section>
+
         <section class="page" id="admin-bet-page">
           <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · CONTEÚDO</p><h1>Cadastrar aposta sugerida</h1><p>Preencha os campos ou carregue um JSON para publicar uma nova recomendação.</p></div><span class="admin-secure">● SOMENTE ADMIN</span></div>
           <section class="panel suggested-bet-admin">
@@ -156,8 +160,9 @@
   <script src="config.js"></script>
   <script src="backend-client.js"></script>
   <script src="saas-auth.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=1"></script>
   <script src="editor.js"></script>
-  <script src="suggested-bets.js"></script>
+  <script src="suggested-bets.js?v=1"></script>
+  <script src="mvp.js?v=1"></script>
 </body>
 </html>
