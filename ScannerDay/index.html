@@ -126,7 +126,7 @@
           <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · CONTEÚDO</p><h1>Importar apostas sugeridas</h1><p>Cadastre as recomendações exclusivamente por meio de um arquivo JSON.</p></div><span class="admin-secure">● SOMENTE ADMIN</span></div>
           <section class="panel suggested-bet-admin">
             <div class="contract-import-grid">
-              <article><span>CONTRATO 2</span><h2>Apostas sugeridas</h2><p>Importe <code>scannerday-tips-v1.json</code>. O lote inteiro será validado antes da publicação.</p><input id="suggestedBetFile" type="file" accept=".json,application/json" hidden><button class="ghost-btn" id="selectSuggestedBetFile" type="button">Importar apostas</button><small id="suggestedBetFileName">Nenhum arquivo selecionado</small></article>
+              <article><span>CONTRATO 2</span><h2>Apostas sugeridas</h2><p>Selecione <code>scannerday-tips-v1.json</code>. O lote inteiro será validado antes da publicação.</p><input id="suggestedBetFile" type="file" accept=".json,application/json" hidden><button class="ghost-btn" id="selectSuggestedBetFile" type="button">Selecionar arquivo</button><small id="suggestedBetFileName">Nenhum arquivo selecionado</small><button class="scan-btn contract-publish-btn" id="publishSuggestedBets" type="button" hidden>Publicar apostas sugeridas</button></article>
               <article><span>CONTRATO 3</span><h2>Liquidação de resultados</h2><p>Importe <code>scannerday-results-v1.json</code> para atualizar status, placar, odd de fechamento e lucro.</p><input id="suggestedResultFile" type="file" accept=".json,application/json" hidden><button class="ghost-btn" id="selectSuggestedResultFile" type="button">Importar resultados</button><small id="suggestedResultFileName">Nenhum arquivo selecionado</small></article>
             </div>
             <p class="admin-login-error" id="suggestedBetError" hidden></p>
@@ -142,7 +142,7 @@
   <script src="saas-auth.js"></script>
   <script src="app.js?v=1"></script>
   <script src="editor.js"></script>
-  <script src="suggested-bets.js?v=2"></script>
+  <script src="suggested-bets.js?v=3"></script>
   <script src="mvp.js?v=2"></script>
 </body>
 </html>
