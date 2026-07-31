@@ -132,8 +132,7 @@
 
   async function syncEditorialAnalyses() {
     try {
-      const response = await fetch("/api/analyses", { headers: { Authorization: `Bearer ${session()?.access_token || ""}` } }); if (!response.ok) return;
-      const rows = await response.json();
+      const rows = await api("/api/analyses");
       if (!rows.length) { games.splice(0, games.length); renderScanner(); renderWatchlist(); return; }
       const mapped = rows.map(row => ({ id: row.id, home: escapeHtml(row.home_team), away: escapeHtml(row.away_team), league: escapeHtml(row.competition),
         date: `${escapeHtml(row.match_date)} · ${escapeHtml(String(row.match_time || "").slice(0,5))}`, odd: Number(row.market_odd), prob: Number(row.scanner_probability),
