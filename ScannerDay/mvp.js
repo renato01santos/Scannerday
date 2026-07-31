@@ -3,8 +3,8 @@
   const token = () => window.ScannerBackend?.state?.session?.access_token || "";
   const esc = value => String(value ?? "").replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]);
 
-  async function api(url) {
-    const response = await fetch(url, { headers: { Authorization: `Bearer ${token()}` } });
+  async function api(url, options = {}) {
+    const response = await fetch(url, { ...options, headers: { Authorization: `Bearer ${token()}`, "Content-Type": "application/json", ...options.headers } });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || `Erro ${response.status}`);
     return data;
@@ -35,7 +35,18 @@
     const root = byId("adminUsersTable");
     try {
       const rows = await api("/api/admin-users");
-      root.innerHTML = `<div class="mvp-user-row mvp-user-head"><span>USUÁRIO</span><span>PLANO</span><span>CADASTRO</span><span>STATUS</span><span>ÚLTIMO ACESSO</span></div>${rows.map(row => `<div class="mvp-user-row"><div><strong>${esc(row.name || row.email)}</strong><small>${esc(row.email)}</small></div><span>${esc(row.plan || "free")}</span><span>${new Date(row.created_at).toLocaleDateString("pt-BR")}</span><span>${row.confirmed_at ? "Ativo" : "Pendente"}</span><span>${row.last_sign_in_at ? new Date(row.last_sign_in_at).toLocaleString("pt-BR") : "—"}</span></div>`).join("")}`;
+      root.innerHTML = `<div class="mvp-user-row mvp-user-head"><span>USUÁRIO</span><span>PERFIL</span><span>CADASTRO</span><span>STATUS</span><span>ÚLTIMO ACESSO</span><span>AÇÕES</span></div>${rows.map(row => `<div class="mvp-user-row"><div><strong>${esc(row.name || row.email)}</strong><small>${esc(row.email)}</small></div><span class="user-role ${row.role === "admin" ? "is-admin" : ""}">${row.role === "admin" ? "Administrador" : "Usuário"}</span><span>${new Date(row.created_at).toLocaleDateString("pt-BR")}</span><span>${row.confirmed_at ? "Ativo" : "Pendente"}</span><span>${row.last_sign_in_at ? new Date(row.last_sign_in_at).toLocaleString("pt-BR") : "—"}</span><div class="user-actions">${row.is_current_user ? '<small>Conta protegida</small>' : `<button data-user-role="${esc(row.id)}" data-next-role="${row.role === "admin" ? "user" : "admin"}">${row.role === "admin" ? "Tornar usuário" : "Tornar admin"}</button><button class="danger" data-delete-user="${esc(row.id)}" data-user-email="${esc(row.email)}">Excluir</button>`}</div></div>`).join("")}`;
+      root.querySelectorAll("[data-user-role]").forEach(button => button.onclick = async () => {
+        const label = button.dataset.nextRole === "admin" ? "administrador" : "usuário comum";
+        if (!confirm(`Alterar este perfil para ${label}?`)) return;
+        try { await api("/api/admin-users", { method: "PATCH", body: JSON.stringify({ id: button.dataset.userRole, role: button.dataset.nextRole }) }); await renderUsers(); }
+        catch (error) { alert(error.message); }
+      });
+      root.querySelectorAll("[data-delete-user]").forEach(button => button.onclick = async () => {
+        if (!confirm(`Excluir definitivamente ${button.dataset.userEmail}? Esta ação não pode ser desfeita.`)) return;
+        try { await api(`/api/admin-users?id=${encodeURIComponent(button.dataset.deleteUser)}`, { method: "DELETE" }); await renderUsers(); }
+        catch (error) { alert(error.message); }
+      });
     } catch (error) { root.innerHTML = `<div class="admin-empty">${esc(error.message)}</div>`; }
   }
 
