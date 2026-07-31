@@ -20,7 +20,7 @@ function normalizeTip(tip, index) {
   const selection = text(tip.selection || tip.pick || tip.title) || matches.map(item => text(item.pick || item.selection)).filter(Boolean).join(" + ");
   const reason = text(tip.reason || tip.analysis) || matches.map(item => text(item.analysis)).filter(Boolean).join(" ");
   const odd = number(tip.odd ?? tip.total_odd);
-  const stake = number(tip.stake);
+  const stake = 1;
   const confidence = number(tip.confidence);
   if (!competition) invalid(`tips[${index}].competition é obrigatório`);
   if (!match) invalid(`tips[${index}].match ou matches é obrigatório`);
@@ -28,7 +28,6 @@ function normalizeTip(tip, index) {
   if (!selection) invalid(`tips[${index}].selection, pick ou title é obrigatório`);
   if (!reason) invalid(`tips[${index}].reason ou analysis é obrigatório`);
   if (!(odd > 1)) invalid(`Odd inválida em ${tipId}`);
-  if (!(stake >= 0)) invalid(`Stake inválida em ${tipId}`);
   if (!(confidence >= 0 && confidence <= 100)) invalid(`Confiança inválida em ${tipId}`);
   const expectedValue = number(tip.expected_value);
   return {
