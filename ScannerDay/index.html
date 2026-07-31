@@ -123,32 +123,12 @@
         <section class="page" id="admin-users-page"><div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Usuários</h1><p>Contas, planos e atividade da plataforma.</p></div></div><section class="panel mvp-table" id="adminUsersTable"><div class="admin-empty">Carregando usuários…</div></section></section>
 
         <section class="page" id="admin-bet-page">
-          <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · CONTEÚDO</p><h1>Cadastrar aposta sugerida</h1><p>Preencha os campos ou carregue um JSON para publicar uma nova recomendação.</p></div><span class="admin-secure">● SOMENTE ADMIN</span></div>
+          <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · CONTEÚDO</p><h1>Importar apostas sugeridas</h1><p>Cadastre as recomendações exclusivamente por meio de um arquivo JSON.</p></div><span class="admin-secure">● SOMENTE ADMIN</span></div>
           <section class="panel suggested-bet-admin">
             <div class="contract-import-grid">
               <article><span>CONTRATO 2</span><h2>Apostas sugeridas</h2><p>Importe <code>scannerday-tips-v1.json</code>. O lote inteiro será validado antes da publicação.</p><input id="suggestedBetFile" type="file" accept=".json,application/json" hidden><button class="ghost-btn" id="selectSuggestedBetFile" type="button">Importar apostas</button><small id="suggestedBetFileName">Nenhum arquivo selecionado</small></article>
               <article><span>CONTRATO 3</span><h2>Liquidação de resultados</h2><p>Importe <code>scannerday-results-v1.json</code> para atualizar status, placar, odd de fechamento e lucro.</p><input id="suggestedResultFile" type="file" accept=".json,application/json" hidden><button class="ghost-btn" id="selectSuggestedResultFile" type="button">Importar resultados</button><small id="suggestedResultFileName">Nenhum arquivo selecionado</small></article>
             </div>
-            <div class="manual-bet-divider"><span>OU CADASTRE UMA APOSTA MANUALMENTE</span></div>
-            <form id="suggestedBetForm" class="suggested-bet-form">
-              <label>ID único<input id="betTipId" required placeholder="TIP-20260730-001"></label>
-              <label>Competição<input id="betCompetition" required placeholder="Brasileirão Série A"></label>
-              <label>Mandante<input id="betHomeTeam" required placeholder="Time mandante"></label>
-              <label>Visitante<input id="betAwayTeam" required placeholder="Time visitante"></label>
-              <label>Data<input id="betMatchDate" type="date" required></label>
-              <label>Horário<input id="betMatchTime" type="time"></label>
-              <label>Mercado<input id="betMarket" required placeholder="Resultado final"></label>
-              <label>Seleção sugerida<input id="betSelection" required placeholder="Vitória do mandante"></label>
-              <label>Odd de entrada<input id="betOdd" type="number" min="1.01" step="0.01" required></label>
-              <label>Odd mínima<input id="betMinimumOdd" type="number" min="1.01" step="0.01"></label>
-              <label>Stake sugerida<input id="betStake" type="number" min="0" step="0.10" value="1" required></label>
-              <label>Confiança (%)<input id="betConfidence" type="number" min="0" max="100" value="70" required></label>
-              <label>ScannerScore<input id="betScannerScore" type="number" min="0" max="100"></label>
-              <label>EV (%)<input id="betExpectedValue" type="number" step="0.01"></label>
-              <label class="bet-analysis-field">Análise e justificativa<textarea id="betAnalysis" required placeholder="Explique os dados e motivos desta entrada..."></textarea></label>
-              <label class="bet-analysis-field">Orientação<textarea id="betInstruction" placeholder="Orientação adicional para o usuário..."></textarea></label>
-              <div class="bet-form-actions"><button class="scan-btn" type="submit">Publicar aposta sugerida</button></div>
-            </form>
             <p class="admin-login-error" id="suggestedBetError" hidden></p>
           </section>
         </section>
@@ -162,7 +142,7 @@
   <script src="saas-auth.js"></script>
   <script src="app.js?v=1"></script>
   <script src="editor.js"></script>
-  <script src="suggested-bets.js?v=1"></script>
+  <script src="suggested-bets.js?v=2"></script>
   <script src="mvp.js?v=2"></script>
 </body>
 </html>
