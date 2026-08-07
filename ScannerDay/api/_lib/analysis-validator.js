@@ -52,7 +52,7 @@ function validatePayload(payload) {
   const errors = [];
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) return { valid: false, errors: [{ path: "$", message: "JSON raiz deve ser um objeto", match: null }] };
   ROOT_FIELDS.forEach(field => { if (payload[field] === undefined || payload[field] === null || payload[field] === "") add(errors, field, `${field} não encontrado`); });
-  if (payload.schema_version && payload.schema_version !== "1.0") add(errors, "schema_version", "Apenas schema_version 1.0 é suportado");
+  if (payload.schema_version && !["1.0", "2.0"].includes(String(payload.schema_version))) add(errors, "schema_version", "schema_version deve ser 1.0 ou 2.0");
   if (payload.generated_at && Number.isNaN(Date.parse(payload.generated_at))) add(errors, "generated_at", "generated_at deve ser uma data ISO válida");
   if (!Array.isArray(payload.analyses) || payload.analyses.length === 0) add(errors, "analyses", "analyses deve conter pelo menos uma análise");
   else payload.analyses.forEach((item, index) => validateAnalysis(item, index, errors));
