@@ -8,6 +8,7 @@ module.exports = async function handler(request, response) {
     const admin = await requireAdmin(request);
     const body = parseBody(request);
     const payload = body?.payload || body;
+    payload.methodology = payload.methodology || payload.methodology_version || "ScannerDay";
     const validation = validatePayload(payload);
     if (!validation.valid) return response.status(422).json(validation);
     const premiumClassifications = new Map();
@@ -37,7 +38,8 @@ module.exports = async function handler(request, response) {
         score_breakdown: item.score_breakdown ?? null,
         classification: premiumClassifications.get(`${item.match.home_team}|${item.match.away_team}|${item.match.date}`) || item.scanner.classification,
         stake: item.recommendation.official_entry ? 1 : 0,
-        suggested_stake: item.recommendation.official_entry ? 1 : 0
+        suggested_stake: item.recommendation.official_entry ? 1 : 0,
+        methodology_version: payload.methodology_version || payload.methodology || null
       };
       await supabase(`analyses?id=eq.${encodeURIComponent(row.id)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(premium) });
     }

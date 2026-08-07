@@ -1,5 +1,5 @@
 const MAX_BYTES = 10 * 1024 * 1024;
-const ROOT_FIELDS = ["schema_version", "generated_at", "methodology", "analyses"];
+const ROOT_FIELDS = ["schema_version", "generated_at", "analyses"];
 
 function isNumber(value) { return typeof value === "number" && Number.isFinite(value); }
 function add(errors, path, message, match) { errors.push({ path, message, match: match || null }); }
@@ -51,6 +51,7 @@ function validatePayload(payload) {
   const errors = [];
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) return { valid: false, errors: [{ path: "$", message: "JSON raiz deve ser um objeto", match: null }] };
   ROOT_FIELDS.forEach(field => { if (payload[field] === undefined || payload[field] === null || payload[field] === "") add(errors, field, `${field} não encontrado`); });
+  if (!payload.methodology && !payload.methodology_version) add(errors, "methodology_version", "methodology ou methodology_version deve ser informado");
   if (payload.schema_version && !["1.0", "2.0"].includes(String(payload.schema_version))) add(errors, "schema_version", "schema_version deve ser 1.0 ou 2.0");
   if (payload.generated_at && Number.isNaN(Date.parse(payload.generated_at))) add(errors, "generated_at", "generated_at deve ser uma data ISO válida");
   if (!Array.isArray(payload.analyses) || payload.analyses.length === 0) add(errors, "analyses", "analyses deve conter pelo menos uma análise");

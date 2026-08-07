@@ -20,6 +20,7 @@
     const admin = profile?.role === "admin";
     document.body.classList.toggle("admin-mode", admin);
     document.querySelectorAll("[data-admin-only]").forEach(element => element.hidden = !admin);
+    if (!admin && location.pathname.startsWith("/admin")) navigate("dashboard");
     byId("accountName").textContent = profile?.name || session.user?.email?.split("@")[0] || "Usuário";
     byId("accountAvatar").textContent = initials(profile?.name || session.user?.email);
     byId("accountRole").textContent = admin ? "Administrador" : "Conta ScannerDay";
