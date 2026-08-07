@@ -171,7 +171,7 @@
     toast("Resultado atualizado", `Análise classificada como ${response.result === "green" ? "Green" : "Red"}.`);
   };
   window.ScannerAnalyticsLoader = async () => {
-    try { const data = await api("/api/scanner-analytics"); window.ScannerAnalyticsRenderer?.(data); }
+    try { const data = await api("/api/analyses?mode=analytics"); window.ScannerAnalyticsRenderer?.(data); }
     catch (error) { console.warn("Scanner Analytics indisponível:", error.message); }
   };
   window.addEventListener("scannerday:authenticated", () => window.ScannerAnalyticsLoader());
