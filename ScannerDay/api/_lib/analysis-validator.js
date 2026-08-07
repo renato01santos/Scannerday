@@ -22,6 +22,19 @@ function validateAnalysis(item, index, errors) {
   for (const field of ["scanner_probability", "market_probability", "scanner_score", "confidence"]) {
     if (isNumber(item.scanner?.[field]) && (item.scanner[field] < 0 || item.scanner[field] > 100)) add(errors, `${path}.scanner.${field}`, `${field} deve estar entre 0 e 100`, match);
   }
+  for (const field of ["risk_score", "consensus_score"]) {
+    if (item.scanner?.[field] !== undefined && item.scanner[field] !== null && (!isNumber(item.scanner[field]) || item.scanner[field] < 0 || item.scanner[field] > 100)) add(errors, `${path}.scanner.${field}`, `${field} deve estar entre 0 e 100`, match);
+  }
+  if (item.scanner?.risk_level !== undefined && !["Low", "Medium", "High", "Very High"].includes(item.scanner.risk_level)) add(errors, `${path}.scanner.risk_level`, "risk_level deve ser Low, Medium, High ou Very High", match);
+  if (item.score_breakdown !== undefined) {
+    const fields = ["squad_strength", "recent_form", "home_away", "expected_value", "xg", "injuries", "motivation", "head_to_head"];
+    if (!item.score_breakdown || typeof item.score_breakdown !== "object" || Array.isArray(item.score_breakdown)) add(errors, `${path}.score_breakdown`, "score_breakdown deve ser um objeto", match);
+    else {
+      fields.forEach(field => { if (!isNumber(item.score_breakdown[field]) || item.score_breakdown[field] < 0) add(errors, `${path}.score_breakdown.${field}`, `${field} deve ser um número positivo`, match); });
+      const total = fields.reduce((sum, field) => sum + (isNumber(item.score_breakdown[field]) ? item.score_breakdown[field] : 0), 0);
+      if (fields.every(field => isNumber(item.score_breakdown[field])) && total !== item.scanner?.scanner_score) add(errors, `${path}.score_breakdown`, `a soma (${total}) deve ser igual ao scanner_score (${item.scanner?.scanner_score})`, match);
+    }
+  }
   if (!["A+", "A", "B", "C", "Rejected", "Reprovado"].includes(item.scanner?.classification)) add(errors, `${path}.scanner.classification`, "classification deve ser A+, A, B, C ou Rejected", match);
   if (!item.scanner?.status) add(errors, `${path}.scanner.status`, "status não encontrado", match);
   if (!Array.isArray(item.predicted_scores)) add(errors, `${path}.predicted_scores`, "predicted_scores deve ser uma lista", match);

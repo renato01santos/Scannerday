@@ -78,7 +78,7 @@
   function renderPreview(payload) {
     byId("analysisPreviewGrid").innerHTML = payload.analyses.map(item => {
       const likely = [...item.predicted_scores].sort((a, b) => b.probability - a.probability)[0];
-      return `<article class="import-preview-card"><header><div><h3>${escapeHtml(item.match.home_team)} × ${escapeHtml(item.match.away_team)}</h3><p>${escapeHtml(item.competition)} · ${escapeHtml(item.match.date)} ${escapeHtml(item.match.time)}</p></div><span class="badge grade-${item.scanner.classification === "A+" ? "ap" : item.scanner.classification.toLowerCase()}">${escapeHtml(item.scanner.classification)}</span></header><div class="preview-metrics"><div><span>SCANNERSCORE</span><strong>${item.scanner.scanner_score}</strong></div><div><span>EV</span><strong class="green-text">${item.scanner.expected_value >= 0 ? "+" : ""}${item.scanner.expected_value}%</strong></div><div><span>CONFIANÇA</span><strong>${item.scanner.confidence}%</strong></div><div><span>ENTRADA OFICIAL</span><strong class="${item.recommendation.official_entry ? "green-text" : ""}">${item.recommendation.official_entry ? "SIM" : "NÃO"}</strong></div><div><span>PLACAR PROVÁVEL</span><strong>${escapeHtml(likely?.score || "—")}</strong></div><div><span>ODD</span><strong>${Number(item.market.market_odd).toFixed(2)}</strong></div></div></article>`;
+      return `<article class="import-preview-card"><header><div><h3>${escapeHtml(item.match.home_team)} × ${escapeHtml(item.match.away_team)}</h3><p>${escapeHtml(item.competition)} · ${escapeHtml(item.match.date)} ${escapeHtml(item.match.time)}</p></div><span class="badge grade-${item.scanner.classification === "A+" ? "ap" : item.scanner.classification.toLowerCase()}">${escapeHtml(item.scanner.classification)}</span></header><div class="preview-metrics"><div><span>SCANNERSCORE</span><strong>${item.scanner.scanner_score}</strong></div><div><span>EV</span><strong class="green-text">${item.scanner.expected_value >= 0 ? "+" : ""}${item.scanner.expected_value}%</strong></div><div><span>CONFIANÇA</span><strong>${item.scanner.confidence}%</strong></div><div><span>RISK</span><strong>${item.scanner.risk_score ?? "—"}</strong></div><div><span>CONSENSUS</span><strong>${item.scanner.consensus_score ?? "—"}</strong></div><div><span>ENTRADA OFICIAL</span><strong class="${item.recommendation.official_entry ? "green-text" : ""}">${item.recommendation.official_entry ? "SIM" : "NÃO"}</strong></div><div><span>PLACAR PROVÁVEL</span><strong>${escapeHtml(likely?.score || "—")}</strong></div><div><span>ODD</span><strong>${Number(item.market.market_odd).toFixed(2)}</strong></div></div></article>`;
     }).join(""); byId("analysisPreview").hidden = false;
   }
 
@@ -137,7 +137,8 @@
       const mapped = rows.map(row => ({ id: row.id, home: escapeHtml(row.home_team), away: escapeHtml(row.away_team), league: escapeHtml(row.competition),
         matchDate: String(row.match_date || ""), matchTime: String(row.match_time || "").slice(0,5), date: `${escapeHtml(row.match_date)} · ${escapeHtml(String(row.match_time || "").slice(0,5))}`, odd: Number(row.market_odd), prob: Number(row.scanner_probability),
         score: Number(row.scanner_score), classification: row.classification, book: escapeHtml(row.market || "Mercado"), form: "Editorial", xg: 0, xga: 0, move: 0,
-        implied: Number(row.market_probability), ev: Number(row.expected_value), fair: Number(row.fair_odd), confidence: Number(row.confidence_index),
+        implied: Number(row.market_probability), ev: Number(row.expected_value), fair: Number(row.fair_odd), confidence: Number(row.confidence_index), riskScore: row.risk_score === null ? null : Number(row.risk_score), riskLevel: row.risk_level, consensusScore: row.consensus_score === null ? null : Number(row.consensus_score), scoreBreakdown: row.score_breakdown,
+        strengths: (row.strengths || []).map(item => escapeHtml(item.description)), risks: (row.risks || []).map(item => escapeHtml(item.description)),
         explanation: escapeHtml(row.scanner_explain), selection: escapeHtml(row.selection || row.market || ""), officialEntry: row.official_entry, stake: row.official_entry ? 1 : 0, instruction: escapeHtml(row.instruction), scannerResult: (Array.isArray(row.results) ? row.results[0]?.result : row.results?.result) || "pending" }));
       games.splice(0, games.length, ...mapped);
       setHtml("#topGames", games.slice(0, 4).map(topRow).join(""));
@@ -155,7 +156,7 @@
       if(leaguePanel){const leagueCounts=Object.entries(games.reduce((acc,g)=>{acc[g.league]=(acc[g.league]||0)+1;return acc;},{})).sort((a,b)=>b[1]-a[1]);leaguePanel.innerHTML=`<div class="panel-head"><div><h2>Distribuição por liga</h2><p>Análises publicadas</p></div></div><div class="league-list">${leagueCounts.map(([league,count])=>`<span><i style="--c:#755cf5"></i>${league} <b>${count}</b></span>`).join('')}</div>`;}
       const scannerBadge = document.querySelector('[data-page="scanner"] b'); if (scannerBadge) scannerBadge.textContent = activeGames().length;
       const best = games[0]; if (best) setHtml("#aiAnswer", `<span>SCANNER AI</span><h2>${best.home} × ${best.away}</h2><p>${best.explanation || "Análise editorial publicada."}</p><p><strong>Orientação:</strong> ${best.instruction || "Acompanhar o mercado."}</p><small>Análise estatística e informativa. Não constitui garantia de resultado.</small>`);
-      renderScanner(); renderWatchlist(); bindGames();
+      renderScanner(); renderWatchlist(); bindGames(); window.ScannerAnalyticsLoader?.();
     } catch (error) { console.warn("Análises editoriais indisponíveis:", error.message); }
   }
   window.addEventListener("scannerday:authenticated", event => { updateAuthUI(); if (event.detail?.isAdmin) loadImports(); syncEditorialAnalyses(); });
@@ -166,6 +167,13 @@
     if (game) game.scannerResult = response.result;
     renderAnalysisHistory();
     renderScannerResults();
+    await window.ScannerAnalyticsLoader?.();
     toast("Resultado atualizado", `Análise classificada como ${response.result === "green" ? "Green" : "Red"}.`);
   };
+  window.ScannerAnalyticsLoader = async () => {
+    try { const data = await api("/api/scanner-analytics"); window.ScannerAnalyticsRenderer?.(data); }
+    catch (error) { console.warn("Scanner Analytics indisponível:", error.message); }
+  };
+  window.addEventListener("scannerday:authenticated", () => window.ScannerAnalyticsLoader());
+  if (session()?.access_token) window.ScannerAnalyticsLoader();
 })();

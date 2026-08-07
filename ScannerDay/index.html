@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="premium.css?v=2" />
+  <link rel="stylesheet" href="premium.css?v=3" />
   <link rel="stylesheet" href="admin.css" />
   <link rel="stylesheet" href="admin-login.css" />
   <link rel="stylesheet" href="saas-auth.css" />
@@ -41,6 +41,7 @@
         <button class="nav-item" data-page="scanner"><span>⌖</span> Scanner <b>0</b></button>
         <button class="nav-item" data-page="history"><span>◷</span> Histórico do Scanner</button>
         <button class="nav-item" data-page="scanner-results"><span>✓</span> Resultados do Scanner</button>
+        <button class="nav-item" data-page="scanner-analytics"><span>▥</span> Scanner Analytics</button>
         <button class="nav-item" data-page="suggested-bets"><span>★</span> Aposta sugerida</button>
         <button class="nav-item" data-page="results"><span>✓</span> Resultados</button>
         <span id="watchCount" hidden>0</span>
@@ -73,6 +74,8 @@
             <article class="kpi highlight"><div><span>MAIOR EV IMPORTADO</span><strong>—</strong><small>Nenhum dado publicado</small></div><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></article>
           </div>
 
+          <div class="kpis premium-dashboard-kpis" id="premiumDashboardKpis"><article class="simple-kpi"><span>SCANNER MÉDIO</span><strong>—</strong></article><article class="simple-kpi"><span>CONFIDENCE MÉDIA</span><strong>—</strong></article><article class="simple-kpi"><span>RISK MÉDIO</span><strong>—</strong></article><article class="simple-kpi"><span>ROI / YIELD</span><strong>—</strong></article><article class="simple-kpi"><span>LUCRO</span><strong>—</strong></article><article class="simple-kpi"><span>APOSTAS HOJE</span><strong>0</strong></article><article class="simple-kpi"><span>JOGOS MONITOR</span><strong>0</strong></article><article class="simple-kpi"><span>ENTRADAS OFICIAIS</span><strong>0</strong></article></div>
+
           <div class="ops-grid" data-admin-only>
             <section class="panel scanner-status"><div class="panel-head"><div><h2>Base editorial</h2><p>Análises importadas</p></div><span class="live-pill"><i></i> REAL</span></div><div class="status-times"><div><span>ÚLTIMA IMPORTAÇÃO</span><strong>—</strong><small>Aguardando dados</small></div><div><span>ORIGEM</span><strong>JSON</strong><small>Validado no servidor</small></div><div><span>ARMAZENAMENTO</span><strong>SQL</strong><small>Supabase</small></div></div></section>
             <section class="panel api-status"><div class="panel-head"><div><h2>Status das APIs</h2><p>Saúde das integrações</p></div><span class="all-systems">4 serviços</span></div><div class="api-grid"><span><i></i>API de Jogos <b>Verificando</b></span><span><i></i>API de Odds <b>Verificando</b></span><span><i></i>API Estatística <b>Verificando</b></span><span><i></i>API IA <b>Verificando</b></span></div></section>
@@ -98,6 +101,8 @@
         <section class="page" id="history-page"><div class="page-heading"><div><p class="eyebrow">AUDITORIA COMPLETA</p><h1>Histórico do Scanner</h1><p>Análises encerradas e seus resultados classificados pelo administrador.</p></div></div><div class="kpis history-kpis"><article class="simple-kpi"><span>TOTAL DE ANÁLISES</span><strong>0</strong></article><article class="simple-kpi"><span>GREENS</span><strong class="green-text">0</strong></article><article class="simple-kpi"><span>AGUARDANDO</span><strong>0</strong></article><article class="simple-kpi"><span>REDS</span><strong class="red-text">0</strong></article></div><section class="panel history-panel" id="historyTable"></section></section>
 
         <section class="page" id="scanner-results-page"><div class="page-heading"><div><p class="eyebrow">PERFORMANCE DA METODOLOGIA</p><h1>Resultados do Scanner</h1><p>Desempenho exclusivo das entradas aprovadas pelo Scanner, sempre calculadas com stake fixa de 1 unidade.</p></div></div><div class="kpis scanner-result-kpis"><article class="simple-kpi"><span>ENTRADAS LIQUIDADAS</span><strong>0</strong></article><article class="simple-kpi"><span>GREENS / REDS</span><strong>0 / 0</strong></article><article class="simple-kpi"><span>WIN RATE</span><strong>—</strong></article><article class="simple-kpi"><span>LUCRO / ROI</span><strong>—</strong></article></div><section class="panel scanner-performance-panel"><div class="panel-head"><div><h2>Histórico de entradas aprovadas</h2><p id="scannerResultSummary">Nenhuma entrada liquidada.</p></div><span class="scanner-source-badge">SOMENTE SCANNER</span></div><div id="scannerResultsTable"></div></section></section>
+
+        <section class="page" id="scanner-analytics-page"><div class="page-heading"><div><p class="eyebrow">SCANNER PREMIUM 2.0</p><h1>Scanner Analytics</h1><p>Métricas agregadas exclusivamente das análises e entradas oficiais do Scanner.</p></div></div><div class="kpis analytics-kpis" id="analyticsKpis"><article class="simple-kpi"><span>ANÁLISES / OFICIAIS</span><strong>0 / 0</strong></article><article class="simple-kpi"><span>GREENS / REDS / VOIDS</span><strong>0 / 0 / 0</strong></article><article class="simple-kpi"><span>ASSERTIVIDADE</span><strong>—</strong></article><article class="simple-kpi"><span>ROI / YIELD</span><strong>—</strong></article><article class="simple-kpi"><span>LUCRO</span><strong>—</strong></article></div><div class="analytics-grid" id="analyticsCharts"><section class="panel premium-empty"><h2>Aguardando agregações</h2><p>Os gráficos serão atualizados após a migração Premium 2.0.</p></section></div></section>
 
         <section class="page" id="stats-page"><div class="page-heading"><div><p class="eyebrow">INTELIGÊNCIA HISTÓRICA</p><h1>Estatísticas</h1><p>Métricas calculadas somente com dados disponíveis.</p></div></div><div class="kpis"><article class="simple-kpi"><span>TAXA DE ACERTO</span><strong>—</strong></article><article class="simple-kpi"><span>ROI</span><strong>—</strong></article><article class="simple-kpi"><span>YIELD</span><strong>—</strong></article><article class="simple-kpi"><span>LUCRO</span><strong>—</strong></article></div><div class="stats-grid"><section class="panel"><div class="premium-empty"><h2>Sem resultados liquidados</h2><p>Os arquivos importados contêm análises, mas ainda não contêm resultados para calcular desempenho.</p></div></section><section class="panel"><div class="premium-empty"><h2>Sem amostra histórica</h2><p>ROI, yield e taxa de acerto permanecem vazios até existirem dados reais.</p></div></section></div></section>
 
@@ -146,8 +151,8 @@
   <script src="config.js"></script>
   <script src="backend-client.js"></script>
   <script src="saas-auth.js"></script>
-  <script src="app.js?v=5"></script>
-  <script src="editor.js?v=6"></script>
+  <script src="app.js?v=6"></script>
+  <script src="editor.js?v=7"></script>
   <script src="suggested-bets.js?v=4"></script>
   <script src="mvp.js?v=2"></script>
 </body>
