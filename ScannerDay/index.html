@@ -39,6 +39,7 @@
       <nav id="nav">
         <button class="nav-item active" data-page="dashboard"><span>⌁</span> Visão geral</button>
         <button class="nav-item" data-page="scanner"><span>⌖</span> Scanner <b>0</b></button>
+        <button class="nav-item" data-page="history"><span>◷</span> Histórico do Scanner</button>
         <button class="nav-item" data-page="suggested-bets"><span>★</span> Aposta sugerida</button>
         <button class="nav-item" data-page="results"><span>✓</span> Resultados</button>
         <span id="watchCount" hidden>0</span>
@@ -89,11 +90,11 @@
           <div class="alerts-grid"><section class="panel"><div class="panel-head"><div><h2>Central de alertas</h2><p>Somente eventos reais</p></div></div><div class="premium-empty"><h2>Nenhum alerta real</h2><p>As importações atuais não contêm histórico de alterações.</p></div></section><section class="panel"><div class="panel-head"><div><h2>Watchlist</h2><p>Acompanhamento prioritário</p></div><button data-go="watchlist">Abrir lista →</button></div><div id="dashboardWatch" class="empty-watch"><span>☆</span><strong>Nenhum jogo acompanhado</strong><small>Favorite uma análise importada para monitorá-la.</small></div></section></div>
         </section>
 
-        <section class="page" id="scanner-page"><div class="page-heading"><div><p class="eyebrow">ANÁLISES PUBLICADAS</p><h1>Scanner diário</h1><p>Todos os candidatos encontrados, sem filtros ocultos.</p></div></div><div class="filters"><label>Busca <input id="searchInput" placeholder="Time ou liga..." /></label><label>Classificação <select id="classFilter"><option value="all">Todas</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>Reprovado</option></select></label><label>Odd <select><option>1.25—1.60</option></select></label></div><section class="panel table-panel"><div class="table-head"><span>JOGO / LIGA</span><span>ODD</span><span>PROB.</span><span>ODD JUSTA</span><span>EV</span><span>SCORE</span><span>CLASSE</span></div><div id="scannerTable"></div></section></section>
+        <section class="page" id="scanner-page"><div class="page-heading"><div><p class="eyebrow">ANÁLISES PUBLICADAS</p><h1>Scanner diário</h1><p>Jogos futuros e em andamento; após o encerramento estimado, são movidos para o Histórico.</p></div></div><div class="filters"><label>Busca <input id="searchInput" placeholder="Time ou liga..." /></label><label>Classificação <select id="classFilter"><option value="all">Todas</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>Reprovado</option></select></label><label>Odd <select><option>1.25—1.60</option></select></label></div><section class="panel table-panel"><div class="table-head"><span>JOGO / LIGA</span><span>ODD</span><span>PROB.</span><span>ODD JUSTA</span><span>EV</span><span>SCORE</span><span>CLASSE</span></div><div id="scannerTable"></div></section></section>
 
         <section class="page" id="ranking-page"><div class="page-heading"><div><p class="eyebrow">ETAPA 5</p><h1>Top ScannerDay</h1><p>O ranking completo das melhores oportunidades.</p></div></div><div class="podium" id="podium"></div><section class="panel"><div class="table-head rank"><span>#</span><span>JOGO</span><span>ODD</span><span>PROB.</span><span>EV</span><span>SCANNERSCORE</span><span>CLASSE</span></div><div id="rankTable"></div></section></section>
 
-        <section class="page" id="history-page"><div class="page-heading"><div><p class="eyebrow">AUDITORIA COMPLETA</p><h1>Histórico</h1><p>Todas as análises publicadas ficam registradas.</p></div></div><div class="kpis history-kpis"><article class="simple-kpi"><span>TOTAL DE ANÁLISES</span><strong>0</strong></article><article class="simple-kpi"><span>ENTRADAS OFICIAIS</span><strong class="green-text">0</strong></article><article class="simple-kpi"><span>MONITORAMENTO</span><strong>0</strong></article><article class="simple-kpi"><span>DESCARTADAS</span><strong class="red-text">0</strong></article></div><section class="panel history-panel" id="historyTable"></section></section>
+        <section class="page" id="history-page"><div class="page-heading"><div><p class="eyebrow">AUDITORIA COMPLETA</p><h1>Histórico do Scanner</h1><p>Análises de jogos cujo encerramento estimado já ocorreu.</p></div></div><div class="kpis history-kpis"><article class="simple-kpi"><span>TOTAL DE ANÁLISES</span><strong>0</strong></article><article class="simple-kpi"><span>ENTRADAS OFICIAIS</span><strong class="green-text">0</strong></article><article class="simple-kpi"><span>MONITORAMENTO</span><strong>0</strong></article><article class="simple-kpi"><span>DESCARTADAS</span><strong class="red-text">0</strong></article></div><section class="panel history-panel" id="historyTable"></section></section>
 
         <section class="page" id="stats-page"><div class="page-heading"><div><p class="eyebrow">INTELIGÊNCIA HISTÓRICA</p><h1>Estatísticas</h1><p>Métricas calculadas somente com dados disponíveis.</p></div></div><div class="kpis"><article class="simple-kpi"><span>TAXA DE ACERTO</span><strong>—</strong></article><article class="simple-kpi"><span>ROI</span><strong>—</strong></article><article class="simple-kpi"><span>YIELD</span><strong>—</strong></article><article class="simple-kpi"><span>LUCRO</span><strong>—</strong></article></div><div class="stats-grid"><section class="panel"><div class="premium-empty"><h2>Sem resultados liquidados</h2><p>Os arquivos importados contêm análises, mas ainda não contêm resultados para calcular desempenho.</p></div></section><section class="panel"><div class="premium-empty"><h2>Sem amostra histórica</h2><p>ROI, yield e taxa de acerto permanecem vazios até existirem dados reais.</p></div></section></div></section>
 
@@ -142,8 +143,8 @@
   <script src="config.js"></script>
   <script src="backend-client.js"></script>
   <script src="saas-auth.js"></script>
-  <script src="app.js?v=2"></script>
-  <script src="editor.js?v=3"></script>
+  <script src="app.js?v=3"></script>
+  <script src="editor.js?v=4"></script>
   <script src="suggested-bets.js?v=4"></script>
   <script src="mvp.js?v=2"></script>
 </body>
