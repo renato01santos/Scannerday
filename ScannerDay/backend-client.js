@@ -48,6 +48,7 @@
     });
     if (session?.access_token) {
       state.session = session;
+      localStorage.setItem("scannerday-session", JSON.stringify(session));
     }
     return session;
   }
@@ -58,6 +59,7 @@
       body: JSON.stringify({ email, password })
     });
     state.session = session;
+    localStorage.setItem("scannerday-session", JSON.stringify(session));
     return session;
   }
 
@@ -71,6 +73,7 @@
     const refreshed = await response.json().catch(() => ({}));
     if (!response.ok) { signOut(); throw new Error(refreshed?.msg || refreshed?.error_description || "Sessão expirada. Entre novamente."); }
     state.session = refreshed;
+    localStorage.setItem("scannerday-session", JSON.stringify(refreshed));
     return refreshed;
   }
 
@@ -129,8 +132,10 @@
     return request(`/rest/v1/watchlist?game_id=eq.${encodeURIComponent(gameId)}`, { method: "DELETE" });
   }
 
-  // A sessão existe somente na memória desta página. Atualizar ou reabrir exige novo login.
-  localStorage.removeItem("scannerday-session");
+  const saved = localStorage.getItem("scannerday-session");
+  if (saved) {
+    try { state.session = JSON.parse(saved); } catch (_) { localStorage.removeItem("scannerday-session"); }
+  }
 
   window.ScannerBackend = { state, configured, init, signUp, signIn, refreshSession, ensureSession, signOut, getProfile, recoverPassword, listGames, listHistory, getScannerWeights, getServiceStatus, toggleWatchlist };
 })();
