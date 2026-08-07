@@ -52,7 +52,6 @@
         <button class="nav-item" data-page="scanner-results" data-admin-only><span>▥</span> Performance Scanner</button>
         <button class="nav-item" data-page="admin-imports" data-admin-only><span>▤</span> Histórico de importações</button>
         <button class="nav-item" data-page="admin-users" data-admin-only><span>♙</span> Usuários</button>
-        <button class="nav-item" data-page="settings" data-admin-only><span>⚙</span> Configurações</button>
       </nav>
       <div class="sidebar-card" data-admin-only><div class="pulse"></div><div><strong>Carregando dados</strong><small>Aguardando o Supabase</small></div></div>
       <div class="sidebar-footer"><div class="avatar" id="accountAvatar">U</div><div><strong id="accountName">Usuário</strong><small id="accountRole">Conta ScannerDay</small></div><button id="sidebarLogout" title="Sair">↪</button></div>
@@ -108,8 +107,6 @@
 
         <section class="page" id="stats-page"><div class="page-heading"><div><p class="eyebrow">INTELIGÊNCIA HISTÓRICA</p><h1>Estatísticas</h1><p>Métricas calculadas somente com dados disponíveis.</p></div></div><div class="kpis"><article class="simple-kpi"><span>TAXA DE ACERTO</span><strong>—</strong></article><article class="simple-kpi"><span>ROI</span><strong>—</strong></article><article class="simple-kpi"><span>YIELD</span><strong>—</strong></article><article class="simple-kpi"><span>LUCRO</span><strong>—</strong></article></div><div class="stats-grid"><section class="panel"><div class="premium-empty"><h2>Sem resultados liquidados</h2><p>Os arquivos importados contêm análises, mas ainda não contêm resultados para calcular desempenho.</p></div></section><section class="panel"><div class="premium-empty"><h2>Sem amostra histórica</h2><p>ROI, yield e taxa de acerto permanecem vazios até existirem dados reais.</p></div></section></div></section>
 
-        <section class="page" id="settings-page"><div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Configurações</h1><p>Ajuste os critérios e pesos do modelo.</p></div><button class="scan-btn" id="saveSettings">Salvar alterações</button></div><div class="settings-grid"><section class="panel settings-card"><div class="panel-head"><div><h2>Parâmetros do scanner</h2><p>Critérios da etapa inicial</p></div></div><label>Odd mínima <input type="number" value="1.25" step="0.01"></label><label>Odd máxima <input type="number" value="1.60" step="0.01"></label><label>Janela de pesquisa <select><option>Próximos 3 dias</option><option>Próximos 5 dias</option><option>Próximos 7 dias</option></select></label><label class="toggle-row">Somente favorito visitante <input type="checkbox" checked><i></i></label></section><section class="panel settings-card"><div class="panel-head"><div><h2>Pesos do ScannerScore</h2><p>Total: <strong id="weightTotal">100</strong> pontos</p></div></div><div id="weights"></div></section></div></section>
-
         <section class="page" id="admin-import-page">
           <div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO · FLUXO EDITORIAL</p><h1>Importar Arquivo ScannerDay</h1><p>Valide, revise e publique análises estruturadas sem reiniciar o sistema.</p></div><span class="admin-secure">● AMBIENTE PROTEGIDO</span></div>
           <section class="panel admin-auth-panel" id="adminLoginPanel"><div class="admin-login-copy"><strong>Acesso administrativo</strong><small>Entre uma vez para validar e publicar arquivos com segurança.</small></div><div class="admin-login-fields"><label>E-mail <input id="adminEmail" type="email" autocomplete="username" placeholder="admin@seudominio.com" /></label><label>Senha <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Sua senha" /></label><button class="scan-btn" id="adminLogin" type="button">Entrar</button></div><p class="admin-login-error" id="adminLoginError" hidden></p></section>
@@ -154,7 +151,7 @@
   <script src="config.js"></script>
   <script src="backend-client.js"></script>
   <script src="saas-auth.js?v=2"></script>
-  <script src="app.js?v=8"></script>
+  <script src="app.js?v=9"></script>
   <script src="editor.js?v=8"></script>
   <script src="suggested-bets.js?v=4"></script>
   <script src="mvp.js?v=4"></script>
