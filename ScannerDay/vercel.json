@@ -3,19 +3,19 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/scanner", "destination": "/index.html" },
-    { "source": "/picks", "destination": "/index.html" },
-    { "source": "/results", "destination": "/index.html" },
-    { "source": "/analytics", "destination": "/index.html" },
-    { "source": "/admin", "destination": "/index.html" },
-    { "source": "/admin/import-scanner", "destination": "/index.html" },
-    { "source": "/admin/import-picks", "destination": "/index.html" },
-    { "source": "/admin/import-results", "destination": "/index.html" },
-    { "source": "/admin/users", "destination": "/index.html" },
-    { "source": "/admin/settings", "destination": "/index.html" },
-    { "source": "/admin/import-history", "destination": "/index.html" },
-    { "source": "/admin/scanner-history", "destination": "/index.html" },
-    { "source": "/admin/scanner-performance", "destination": "/index.html" }
+    { "source": "/scanner", "destination": "/" },
+    { "source": "/picks", "destination": "/" },
+    { "source": "/results", "destination": "/" },
+    { "source": "/analytics", "destination": "/" },
+    { "source": "/admin", "destination": "/" },
+    { "source": "/admin/import-scanner", "destination": "/" },
+    { "source": "/admin/import-picks", "destination": "/" },
+    { "source": "/admin/import-results", "destination": "/" },
+    { "source": "/admin/users", "destination": "/" },
+    { "source": "/admin/settings", "destination": "/" },
+    { "source": "/admin/import-history", "destination": "/" },
+    { "source": "/admin/scanner-history", "destination": "/" },
+    { "source": "/admin/scanner-performance", "destination": "/" }
   ],
   "headers": [
     {
