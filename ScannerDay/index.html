@@ -96,7 +96,7 @@
           <div class="alerts-grid"><section class="panel"><div class="panel-head"><div><h2>Central de alertas</h2><p>Somente eventos reais</p></div></div><div class="premium-empty"><h2>Nenhum alerta real</h2><p>As importações atuais não contêm histórico de alterações.</p></div></section><section class="panel"><div class="panel-head"><div><h2>Watchlist</h2><p>Acompanhamento prioritário</p></div><button data-go="watchlist">Abrir lista →</button></div><div id="dashboardWatch" class="empty-watch"><span>☆</span><strong>Nenhum jogo acompanhado</strong><small>Favorite uma análise importada para monitorá-la.</small></div></section></div>
         </section>
 
-        <section class="page" id="scanner-page"><div class="page-heading"><div><p class="eyebrow">ANÁLISES PUBLICADAS</p><h1>Scanner diário</h1><p>Jogos futuros e em andamento; após o encerramento estimado, são movidos para o Histórico.</p></div></div><div class="filters"><label>Busca <input id="searchInput" placeholder="Time ou liga..." /></label><label>Classificação <select id="classFilter"><option value="all">Todas</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>Reprovado</option></select></label><label>Odd <select><option>1.25—1.60</option></select></label></div><section class="panel table-panel"><div class="table-head"><span>JOGO / LIGA</span><span>ODD</span><span>PROB.</span><span>ODD JUSTA</span><span>EV</span><span>SCORE</span><span>CLASSE</span></div><div id="scannerTable"></div></section></section>
+        <section class="page" id="scanner-page"><div class="page-heading"><div><p class="eyebrow">ANÁLISES PUBLICADAS</p><h1>Scanner diário</h1><p>Selecione o dia dos jogos. Análises encerradas são movidas automaticamente para o Histórico.</p></div></div><div class="scanner-day-filter" id="scannerDayFilter" aria-label="Filtrar análises pelo dia do jogo"></div><div class="filters"><label>Busca <input id="searchInput" placeholder="Time ou liga..." /></label><label>Classificação <select id="classFilter"><option value="all">Todas</option><option>A+</option><option>A</option><option>B</option><option>C</option><option>Reprovado</option></select></label></div><section class="panel table-panel"><div class="table-head"><span>JOGO / LIGA</span><span>ODD</span><span>PROB.</span><span>ODD JUSTA</span><span>EV</span><span>SCORE</span><span>CLASSE</span></div><div id="scannerTable"></div></section></section>
 
         <section class="page" id="ranking-page"><div class="page-heading"><div><p class="eyebrow">ETAPA 5</p><h1>Top ScannerDay</h1><p>O ranking completo das melhores oportunidades.</p></div></div><div class="podium" id="podium"></div><section class="panel"><div class="table-head rank"><span>#</span><span>JOGO</span><span>ODD</span><span>PROB.</span><span>EV</span><span>SCANNERSCORE</span><span>CLASSE</span></div><div id="rankTable"></div></section></section>
 
@@ -152,7 +152,7 @@
   <script src="config.js"></script>
   <script src="backend-client.js"></script>
   <script src="saas-auth.js?v=2"></script>
-  <script src="app.js?v=10"></script>
+  <script src="app.js?v=11"></script>
   <script src="editor.js?v=8"></script>
   <script src="suggested-bets.js?v=4"></script>
   <script src="mvp.js?v=4"></script>
