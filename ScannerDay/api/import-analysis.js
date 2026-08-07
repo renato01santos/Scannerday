@@ -10,7 +10,12 @@ module.exports = async function handler(request, response) {
     const payload = body?.payload || body;
     const validation = validatePayload(payload);
     if (!validation.valid) return response.status(422).json(validation);
+    const premiumClassifications = new Map();
     for (const item of payload.analyses) {
+      const matchKey = `${item.match.home_team}|${item.match.away_team}|${item.match.date}`;
+      premiumClassifications.set(matchKey, item.scanner.classification);
+      if (item.scanner.classification === "B+") item.scanner.classification = "B";
+      item.recommendation.stake = item.recommendation.official_entry ? 1 : 0;
       if (!item.score_breakdown) continue;
       const fields = ["squad_strength", "recent_form", "home_away", "expected_value", "xg", "injuries", "motivation", "head_to_head"];
       const breakdownTotal = fields.reduce((sum, field) => sum + Number(item.score_breakdown[field] || 0), 0);
@@ -29,7 +34,10 @@ module.exports = async function handler(request, response) {
         risk_score: item.scanner?.risk_score ?? null,
         risk_level: item.scanner?.risk_level ?? null,
         consensus_score: item.scanner?.consensus_score ?? null,
-        score_breakdown: item.score_breakdown ?? null
+        score_breakdown: item.score_breakdown ?? null,
+        classification: premiumClassifications.get(`${item.match.home_team}|${item.match.away_team}|${item.match.date}`) || item.scanner.classification,
+        stake: item.recommendation.official_entry ? 1 : 0,
+        suggested_stake: item.recommendation.official_entry ? 1 : 0
       };
       await supabase(`analyses?id=eq.${encodeURIComponent(row.id)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(premium) });
     }

@@ -34,7 +34,7 @@ function validateAnalysis(item, index, errors) {
       // Diferenças de calibração são aceitas e registradas pelo importador sem alterar as notas informadas.
     }
   }
-  if (!["A+", "A", "B", "C", "Rejected", "Reprovado"].includes(item.scanner?.classification)) add(errors, `${path}.scanner.classification`, "classification deve ser A+, A, B, C ou Rejected", match);
+  if (!["A+", "A", "B+", "B", "C", "Rejected", "Reprovado"].includes(item.scanner?.classification)) add(errors, `${path}.scanner.classification`, "classification deve ser A+, A, B+, B, C ou Rejected", match);
   if (!item.scanner?.status) add(errors, `${path}.scanner.status`, "status não encontrado", match);
   if (!Array.isArray(item.predicted_scores)) add(errors, `${path}.predicted_scores`, "predicted_scores deve ser uma lista", match);
   else item.predicted_scores.forEach((score, scoreIndex) => {

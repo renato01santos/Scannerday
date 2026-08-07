@@ -1,7 +1,7 @@
 // A interface começa vazia e recebe somente análises persistidas no Supabase.
 const games=[];
 function grade(g){if(g.classification)return['Rejected','Reprovado'].includes(g.classification)?'Reprovado':g.classification;if(g.score>=90&&g.ev>=8)return'A+';if(g.score>=80&&g.ev>=5)return'A';if(g.score>=70&&g.ev>=3)return'B';if(g.score>=60&&g.ev>0)return'C';return'Reprovado'}
-function badge(g){const x=grade(g),c={'A+':'ap','A':'a','B':'b','C':'c','Reprovado':'r'}[x];return`<i class="badge grade-${c}">${x}</i>`}
+function badge(g){const x=grade(g),c={'A+':'ap','A':'a','B+':'b','B':'b','C':'c','Reprovado':'r'}[x]||'r';return`<i class="badge grade-${c}">${x}</i>`}
 function ev(g){return`<strong class="${g.ev>=0?'green-text':'red-text'}">${g.ev>=0?'+':''}${g.ev.toFixed(1)}%</strong>`}
 function topRow(g,i){return`<div class="opportunity" data-game="${games.indexOf(g)}"><span class="rank-no">${String(i+1).padStart(2,'0')}</span><div class="teams"><strong>${g.home} <span>×</span> ${g.away}</strong><small>${g.league} • ${g.date}</small></div><div class="metric"><span>ODD</span><strong>${g.odd.toFixed(2)}</strong></div><div class="metric mobile-hide"><span>PROB.</span><strong>${g.prob.toFixed(1)}%</strong></div><div class="metric hide-mid"><span>EV</span>${ev(g)}</div><div class="metric"><span>SCORE</span><strong class="score">${g.score}</strong></div>${badge(g)}</div>`}
 document.querySelector('#topGames').innerHTML='<div class="premium-empty"><span>⌁</span><h2>Nenhuma análise importada</h2><p>Publique um arquivo validado para alimentar o painel.</p></div>';
