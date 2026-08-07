@@ -138,12 +138,13 @@
         matchDate: String(row.match_date || ""), matchTime: String(row.match_time || "").slice(0,5), date: `${escapeHtml(row.match_date)} · ${escapeHtml(String(row.match_time || "").slice(0,5))}`, odd: Number(row.market_odd), prob: Number(row.scanner_probability),
         score: Number(row.scanner_score), classification: row.classification, book: escapeHtml(row.market || "Mercado"), form: "Editorial", xg: 0, xga: 0, move: 0,
         implied: Number(row.market_probability), ev: Number(row.expected_value), fair: Number(row.fair_odd), confidence: Number(row.confidence_index),
-        explanation: escapeHtml(row.scanner_explain), selection: escapeHtml(row.selection || row.market || ""), officialEntry: row.official_entry, stake: Number(row.stake), instruction: escapeHtml(row.instruction), scannerResult: (Array.isArray(row.results) ? row.results[0]?.result : row.results?.result) || "pending" }));
+        explanation: escapeHtml(row.scanner_explain), selection: escapeHtml(row.selection || row.market || ""), officialEntry: row.official_entry, stake: row.official_entry ? 1 : 0, instruction: escapeHtml(row.instruction), scannerResult: (Array.isArray(row.results) ? row.results[0]?.result : row.results?.result) || "pending" }));
       games.splice(0, games.length, ...mapped);
       setHtml("#topGames", games.slice(0, 4).map(topRow).join(""));
       setHtml("#podium", [games[1], games[0], games[2]].filter(Boolean).map((g, i) => { const place = [2, 1, 3][i]; return `<article class="podium-card ${place === 1 ? "first" : ""}"><span class="place">${place}°</span>${badge(g)}<h3>${g.home} × ${g.away}</h3><p>${g.league} · Odd ${g.odd.toFixed(2)}</p><strong>${g.ev >= 0 ? "+" : ""}${g.ev.toFixed(1)}% EV</strong></article>`; }).join(""));
       setHtml("#rankTable", games.map((g, i) => `<div class="rank-row"><b>${String(i + 1).padStart(2, "0")}</b><span>${g.home} × ${g.away}<small>${g.league}</small></span><span>${g.odd.toFixed(2)}</span><span>${g.prob.toFixed(1)}%</span>${ev(g)}<strong>${g.score}</strong>${badge(g)}</div>`).join(""));
       renderAnalysisHistory();
+      renderScannerResults();
       const dashboardKpis = document.querySelectorAll("#dashboard-page .kpi strong");
       if (dashboardKpis.length >= 4) { const maxEv = Math.max(...games.map(g => g.ev)); dashboardKpis[0].textContent = String(games.length).padStart(2, "0"); dashboardKpis[1].textContent = String(games.filter(g => g.officialEntry).length).padStart(2, "0"); dashboardKpis[2].textContent = String(games.filter(g => grade(g) === "Reprovado").length).padStart(2, "0"); dashboardKpis[3].textContent = `${maxEv >= 0 ? "+" : ""}${maxEv.toFixed(1)}%`; const bestLabel=dashboardKpis[3].nextElementSibling;if(bestLabel){const best=games.reduce((a,b)=>b.ev>a.ev?b:a);bestLabel.textContent=`EV • ${best.home} × ${best.away}`;} }
       const marketNumbers=document.querySelectorAll('.market-numbers strong');
@@ -164,6 +165,7 @@
     const game = games.find(item => item.id === analysisId);
     if (game) game.scannerResult = response.result;
     renderAnalysisHistory();
+    renderScannerResults();
     toast("Resultado atualizado", `Análise classificada como ${response.result === "green" ? "Green" : "Red"}.`);
   };
 })();

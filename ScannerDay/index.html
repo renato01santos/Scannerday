@@ -40,6 +40,7 @@
         <button class="nav-item active" data-page="dashboard"><span>⌁</span> Visão geral</button>
         <button class="nav-item" data-page="scanner"><span>⌖</span> Scanner <b>0</b></button>
         <button class="nav-item" data-page="history"><span>◷</span> Histórico do Scanner</button>
+        <button class="nav-item" data-page="scanner-results"><span>✓</span> Resultados do Scanner</button>
         <button class="nav-item" data-page="suggested-bets"><span>★</span> Aposta sugerida</button>
         <button class="nav-item" data-page="results"><span>✓</span> Resultados</button>
         <span id="watchCount" hidden>0</span>
@@ -96,6 +97,8 @@
 
         <section class="page" id="history-page"><div class="page-heading"><div><p class="eyebrow">AUDITORIA COMPLETA</p><h1>Histórico do Scanner</h1><p>Análises encerradas e seus resultados classificados pelo administrador.</p></div></div><div class="kpis history-kpis"><article class="simple-kpi"><span>TOTAL DE ANÁLISES</span><strong>0</strong></article><article class="simple-kpi"><span>GREENS</span><strong class="green-text">0</strong></article><article class="simple-kpi"><span>AGUARDANDO</span><strong>0</strong></article><article class="simple-kpi"><span>REDS</span><strong class="red-text">0</strong></article></div><section class="panel history-panel" id="historyTable"></section></section>
 
+        <section class="page" id="scanner-results-page"><div class="page-heading"><div><p class="eyebrow">PERFORMANCE DA METODOLOGIA</p><h1>Resultados do Scanner</h1><p>Desempenho exclusivo das entradas aprovadas pelo Scanner, sempre calculadas com stake fixa de 1 unidade.</p></div></div><div class="kpis scanner-result-kpis"><article class="simple-kpi"><span>ENTRADAS LIQUIDADAS</span><strong>0</strong></article><article class="simple-kpi"><span>GREENS / REDS</span><strong>0 / 0</strong></article><article class="simple-kpi"><span>WIN RATE</span><strong>—</strong></article><article class="simple-kpi"><span>LUCRO / ROI</span><strong>—</strong></article></div><section class="panel scanner-performance-panel"><div class="panel-head"><div><h2>Histórico de entradas aprovadas</h2><p id="scannerResultSummary">Nenhuma entrada liquidada.</p></div><span class="scanner-source-badge">SOMENTE SCANNER</span></div><div id="scannerResultsTable"></div></section></section>
+
         <section class="page" id="stats-page"><div class="page-heading"><div><p class="eyebrow">INTELIGÊNCIA HISTÓRICA</p><h1>Estatísticas</h1><p>Métricas calculadas somente com dados disponíveis.</p></div></div><div class="kpis"><article class="simple-kpi"><span>TAXA DE ACERTO</span><strong>—</strong></article><article class="simple-kpi"><span>ROI</span><strong>—</strong></article><article class="simple-kpi"><span>YIELD</span><strong>—</strong></article><article class="simple-kpi"><span>LUCRO</span><strong>—</strong></article></div><div class="stats-grid"><section class="panel"><div class="premium-empty"><h2>Sem resultados liquidados</h2><p>Os arquivos importados contêm análises, mas ainda não contêm resultados para calcular desempenho.</p></div></section><section class="panel"><div class="premium-empty"><h2>Sem amostra histórica</h2><p>ROI, yield e taxa de acerto permanecem vazios até existirem dados reais.</p></div></section></div></section>
 
         <section class="page" id="settings-page"><div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Configurações</h1><p>Ajuste os critérios e pesos do modelo.</p></div><button class="scan-btn" id="saveSettings">Salvar alterações</button></div><div class="settings-grid"><section class="panel settings-card"><div class="panel-head"><div><h2>Parâmetros do scanner</h2><p>Critérios da etapa inicial</p></div></div><label>Odd mínima <input type="number" value="1.25" step="0.01"></label><label>Odd máxima <input type="number" value="1.60" step="0.01"></label><label>Janela de pesquisa <select><option>Próximos 3 dias</option><option>Próximos 5 dias</option><option>Próximos 7 dias</option></select></label><label class="toggle-row">Somente favorito visitante <input type="checkbox" checked><i></i></label></section><section class="panel settings-card"><div class="panel-head"><div><h2>Pesos do ScannerScore</h2><p>Total: <strong id="weightTotal">100</strong> pontos</p></div></div><div id="weights"></div></section></div></section>
@@ -119,7 +122,7 @@
           <div class="suggested-bets-grid" id="suggestedBetsGrid"><section class="panel premium-empty"><h2>Nenhuma aposta publicada</h2><p>As recomendações da equipe aparecerão aqui.</p></section></div>
         </section>
 
-        <section class="page" id="results-page"><div class="page-heading"><div><p class="eyebrow">DESEMPENHO REAL</p><h1>Resultados</h1><p>Métricas calculadas somente com apostas liquidadas.</p></div></div><div id="mvpResults"></div></section>
+        <section class="page" id="results-page"><div class="page-heading"><div><p class="eyebrow">APOSTAS SUGERIDAS</p><h1>Resultados das apostas sugeridas</h1><p>Métricas exclusivas das apostas publicadas pelo administrador. Não incluem resultados do Scanner.</p></div></div><div id="mvpResults"></div></section>
 
         <section class="page" id="admin-dashboard-page"><div class="page-heading"><div><p class="eyebrow">ADMINISTRAÇÃO</p><h1>Dashboard administrativo</h1><p>Visão objetiva da operação ScannerDay.</p></div></div><div id="adminDashboardContent"></div></section>
 
@@ -143,8 +146,8 @@
   <script src="config.js"></script>
   <script src="backend-client.js"></script>
   <script src="saas-auth.js"></script>
-  <script src="app.js?v=4"></script>
-  <script src="editor.js?v=5"></script>
+  <script src="app.js?v=5"></script>
+  <script src="editor.js?v=6"></script>
   <script src="suggested-bets.js?v=4"></script>
   <script src="mvp.js?v=2"></script>
 </body>
