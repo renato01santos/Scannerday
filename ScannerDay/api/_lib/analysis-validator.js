@@ -31,8 +31,7 @@ function validateAnalysis(item, index, errors) {
     if (!item.score_breakdown || typeof item.score_breakdown !== "object" || Array.isArray(item.score_breakdown)) add(errors, `${path}.score_breakdown`, "score_breakdown deve ser um objeto", match);
     else {
       fields.forEach(field => { if (!isNumber(item.score_breakdown[field]) || item.score_breakdown[field] < 0) add(errors, `${path}.score_breakdown.${field}`, `${field} deve ser um número positivo`, match); });
-      const total = fields.reduce((sum, field) => sum + (isNumber(item.score_breakdown[field]) ? item.score_breakdown[field] : 0), 0);
-      if (fields.every(field => isNumber(item.score_breakdown[field])) && total !== item.scanner?.scanner_score) add(errors, `${path}.score_breakdown`, `a soma (${total}) deve ser igual ao scanner_score (${item.scanner?.scanner_score})`, match);
+      // Diferenças de calibração são aceitas e registradas pelo importador sem alterar as notas informadas.
     }
   }
   if (!["A+", "A", "B", "C", "Rejected", "Reprovado"].includes(item.scanner?.classification)) add(errors, `${path}.scanner.classification`, "classification deve ser A+, A, B, C ou Rejected", match);

@@ -10,6 +10,13 @@ module.exports = async function handler(request, response) {
     const payload = body?.payload || body;
     const validation = validatePayload(payload);
     if (!validation.valid) return response.status(422).json(validation);
+    for (const item of payload.analyses) {
+      if (!item.score_breakdown) continue;
+      const fields = ["squad_strength", "recent_form", "home_away", "expected_value", "xg", "injuries", "motivation", "head_to_head"];
+      const breakdownTotal = fields.reduce((sum, field) => sum + Number(item.score_breakdown[field] || 0), 0);
+      const adjustment = Number(item.scanner.scanner_score) - breakdownTotal;
+      if (adjustment) item.score_breakdown.calibration_adjustment = adjustment;
+    }
     const result = await supabase("rpc/publish_analysis_import", {
       method: "POST",
       body: JSON.stringify({ payload, source_file_name: body?.file_name || "scannerday.json", importing_user: admin.id })
